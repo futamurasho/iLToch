@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.local 
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/src:/workspace/backend/src
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.local 
+    ports:
+      - "5173:5173"
+    # volumes:
+    #   - ./frontend:/workspace/frontend

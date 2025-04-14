@@ -1,0 +1,35 @@
+from fastapi import FastAPI
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+from gmail_sender import send_email
+
+app = FastAPI()
+
+# React（http://localhost:5173）からのリクエストを許可
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# メール送信用のリクエスト形式
+class EmailRequest(BaseModel):
+    to: str
+    subject: str
+    body: str
+
+#テスト
+@app.get("/")
+def root():
+    return {"message": "Hello, FastAPI in Docker!"}
+
+# メール送信エンドポイント
+@app.post("/send")
+def send(email: EmailRequest):
+    send_email(email.to, email.subject, email.body)
+    return {"message": "メール送信完了"}
+
+#
+#uvicorn main:app --reload
