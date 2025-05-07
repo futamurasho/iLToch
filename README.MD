@@ -1,16 +1,22 @@
 # iLToch
-メールをチャットで管理するWebアプリ
+
+メールをチャットで管理する Web アプリ
 
 ## ディレクトリ構成
+
 ```
 .
 ├── README.md
 ├── docker-compose.yml
-├── backend 
+├── backend
 └── frontend
 ```
 
 ## 環境起動
+
+## backend:http://localhost:8080/
+
+## frontend:http://localhost:3000/
 
 `docker-compose up -d`
 でフロント、バックともに環境起動
