@@ -1,9 +1,9 @@
 version: "3.9"
 services:
   backend:
-    build: 
+    build:
       context: ./backend
-      dockerfile: Dockerfile.local 
+      dockerfile: Dockerfile.local
     ports:
       - "8080:8080"
     volumes:
@@ -13,7 +13,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "5173:5173"
+      - "3000:3000"
     volumes:
       - ./frontend:/workspace/frontend
-      - /workspace/frontend/node_modules  # ← これでホストの node_modules を無視
+      - /workspace/frontend/node_modules # ← これでホストの node_modules を無視
