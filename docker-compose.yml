@@ -13,7 +13,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/workspace/frontend
-      - /workspace/frontend/node_modules # ← これでホストの node_modules を無視
+    #   - "3000:3000"
+    # volumes:
+    #   - ./frontend:/workspace/frontend
+    #   - /workspace/frontend/node_modules # ← これでホストの node_modules を無視
