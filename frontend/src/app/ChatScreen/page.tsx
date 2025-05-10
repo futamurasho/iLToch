@@ -7,6 +7,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Header from "@/components/Header";
 
 type UserListType = {
   id: number;
@@ -35,7 +36,7 @@ const UserList: UserListType[] = [
 export default function ChatScreen() {
   return (
     <div className="flex flex-col h-screen">
-      <div className="">Header</div>
+      <Header/>
       <div className="flex flex-1 overflow-hidden">
         <aside className="w-1/3 border-r p-4 overflow-hidden flex flex-col">
           <Card className="flex flex-col flex-1 overflow-hidden">
