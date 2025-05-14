@@ -29,8 +29,12 @@ const UserList: UserListType[] = [
   },
 ];
 
+
+
+
 export default function ChatScreen() {
   const [messages, setMessages] = useState<MessageType[]>([]);
+  const [selectUser, setSelectUser] = useState<UserListType>({id: 0, name: ""});
 
 
   
@@ -44,11 +48,16 @@ export default function ChatScreen() {
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
-              <ScrollArea className="h-full">
+              <ScrollArea className="h-full ">
                 {UserList.map((user) => (
-                  <div key={user.id} className="p-2 border-b">
-                    {user.name}
-                  </div>
+                <div
+                key={user.id}
+                className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg"
+                onClick={() => {setSelectUser(user)
+                }}
+              >
+                {user.name}
+              </div>
                 ))}
               </ScrollArea>
             </CardContent>
