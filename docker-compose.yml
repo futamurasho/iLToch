@@ -17,3 +17,5 @@ services:
     volumes:
       - ./frontend:/workspace/frontend
       - /workspace/frontend/node_modules # ← これでホストの node_modules を無視
+    environment:
+      - CHOKIDAR_USEPOLLING=true
