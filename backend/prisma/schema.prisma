@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement()) // ユーザーID（自動採番）
+  email         String   @unique                      // ユーザーのメールアドレス（Googleアカウント）
+  accessToken   String                                // OAuth2.0 アクセストークン
+  refreshToken  String                                // OAuth2.0 リフレッシュトークン
+  tokenExpiry   DateTime?                             // トークンの有効期限（NULL可）
+  createdAt     DateTime @default(now())              // 登録日時
+  emails        Email[] 
+}
+
+model Email {
+  id            Int      @id @default(autoincrement())   // メールID（自動採番）
+  userId        Int                                      // 所有ユーザーID（外部キー）
+  gmailMessageId String   @unique                        // GmailメッセージID（ユニーク）
+  subject       String?                                  // メール件名
+  from          String?                                  // 差出人（メールアドレスや名前）
+  snippet       String?                                  // メール本文の冒頭（プレビュー）
+  receivedAt    DateTime?                                // メールの受信時刻
+  isRead        Boolean  @default(false)                 // 既読状態
+  isNotified    Boolean  @default(false)                 // 通知済みかどうか
+  customLabel   String?                                  // ユーザー独自ラベル
+  createdAt     DateTime @default(now())                 // 登録日時
+
+  user          User     @relation(fields: [userId], references: [id]) // 外部キーリレーション
+
+  @@map("emails") // テーブル名を明示（任意）
+}
