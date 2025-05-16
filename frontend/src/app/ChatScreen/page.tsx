@@ -1,6 +1,6 @@
 "use client";
+import FriendSearch from "@/components/FriendSearch"; // ← 追加したやつ
 import { useState } from "react";
-
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -29,9 +29,10 @@ const UserList: UserListType[] = [
   },
 ];
 
+
 export default function ChatScreen() {
   const [messages, setMessages] = useState<MessageType[]>([]);
-
+  const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList); // ← これを追加
 
   
   return (
@@ -44,8 +45,9 @@ export default function ChatScreen() {
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
+            <FriendSearch userList={UserList} onFilter={setFilteredUsers} />
               <ScrollArea className="h-full">
-                {UserList.map((user) => (
+                {filteredUsers.map((user) => (
                   <div key={user.id} className="p-2 border-b">
                     {user.name}
                   </div>
@@ -60,6 +62,7 @@ export default function ChatScreen() {
               <CardTitle className="">〇〇からのメール</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
+     
               <ScrollArea className="h-full">
                 {messages.map((message) => (
                   <MessageBubble key={message.id} text={message.text} />
