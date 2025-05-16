@@ -1,18 +1,18 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 import sqlite3
-from typing import List, Optional
+from typing import Optional
 from datetime import datetime
 
 class Email(BaseModel):
-    id: int
-    userId: int
+    id: str
+    userId: str
     gmailMessageId: str
     subject: Optional[str]
-    from_: Optional[str] = Field(None, alias="from")  #from予約後につき_追加
+    sender: str  
     content: str
     snippet: Optional[str]
     receivedAt: Optional[datetime]
     isRead: bool
     isNotified: bool
-    customLabel: Optional[str]
     createdAt: datetime
+    customLabel: Optional[str]
