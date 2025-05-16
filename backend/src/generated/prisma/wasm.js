@@ -132,6 +132,7 @@ exports.Prisma.EmailScalarFieldEnum = {
   gmailMessageId: 'gmailMessageId',
   subject: 'subject',
   from: 'from',
+  content: 'content',
   snippet: 'snippet',
   receivedAt: 'receivedAt',
   isRead: 'isRead',
