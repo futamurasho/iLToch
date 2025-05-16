@@ -25,13 +25,15 @@ def get_token():
 
     return creds
 
-def send_email(to, subject, body_text):
-    creds = get_token()
+def send_email(to, subject, body_text,access_token):
+    # 1. アクセストークンから Credentials を直接作成
+    creds = Credentials(token=access_token, scopes=SCOPES)
+    # creds = get_token()
     service = build("gmail", "v1", credentials=creds)
 
     message = EmailMessage()
     message["To"] = to
-    message["From"] = "futamura1209@gmail.com"  # 認証済みのアドレスに合わせて書き換えてください
+    message["From"] = "me"  # 認証済みのアドレスに合わせて書き換えてください
     message["Subject"] = subject
     message.set_content(body_text)
 

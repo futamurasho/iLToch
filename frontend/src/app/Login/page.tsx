@@ -1,16 +1,25 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/ChatScreen"; // 2⃣
 
   const handleLogin = () => {
     // 本物のログイン機能はここに追加します
-    setEmail('');
-    setPassword('');
+    setEmail("");
+    setPassword("");
+  };
+
+  const handleGoogleLogin = () => {
+    // Google OAuthの開始
+    signIn("google", { callbackUrl, prompt: "consent" });
   };
 
   return (
@@ -35,6 +44,17 @@ export default function Login() {
           <Button type="button" className="w-full" onClick={handleLogin}>
             ログイン
           </Button>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-500 mb-2">または</p>
+            <Button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="w-full bg-red-500 hover:bg-red-600 text-white"
+            >
+              Googleでログイン
+            </Button>
+          </div>
         </form>
       </div>
     </div>
