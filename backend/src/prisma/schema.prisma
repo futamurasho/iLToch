@@ -27,6 +27,7 @@ model Email {
   gmailMessageId String   @unique                        // GmailメッセージID（ユニーク）
   subject       String?                                  // メール件名
   from          String?                                  // 差出人（メールアドレスや名前）
+  content       String                                   //　メールの本文
   snippet       String?                                  // メール本文の冒頭（プレビュー）
   receivedAt    DateTime?                                // メールの受信時刻
   isRead        Boolean  @default(false)                 // 既読状態
