@@ -1,23 +1,32 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useSession } from "next-auth/react";
 
 function App() {
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+  const { data: session } = useSession(); // ← 追加
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const accessToken = session?.accessToken;
+    if (!accessToken) {
+      alert("ログインしていません！");
+      return;
+    } else {
+      console.log(JSON.stringify({ to, subject, body, accessToken }));
+    }
     await fetch("http://localhost:8080/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ to, subject, body }),
+      body: JSON.stringify({ to, subject, body, accessToken }),
     });
 
-    console.log("送信！", { to, subject, body });
+    console.log("送信！", { to, subject, body, accessToken });
   };
 
   return (

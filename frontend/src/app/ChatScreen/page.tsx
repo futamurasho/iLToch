@@ -1,4 +1,5 @@
 "use client";
+import FriendSearch from "@/components/FriendSearch"; // ← 追加したやつ
 import { useEffect, useState } from "react";
 
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
@@ -30,7 +31,9 @@ const UserList: UserListType[] = [
   },
 ];
 
+
 export default function ChatScreen() {
+  const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList); // ← これを追加
   const [emails, setEmails] = useState<EmailType[]>([]);
   const [selectUser, setSelectUser] = useState<FriendsType>({
     id: "",
@@ -72,6 +75,7 @@ export default function ChatScreen() {
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
+              <FriendSearch userList={UserList} onFilter={setFilteredUsers} />
               <ScrollArea className="h-full ">
                 {friends.map((user) => (
                   <div
@@ -94,6 +98,7 @@ export default function ChatScreen() {
               <CardTitle className="">〇〇からのメール</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
+     
               <ScrollArea className="h-full">
                 {emails.map((email) => (
                   <MessageBubble key={email.id} text={email.content} />
