@@ -10,6 +10,7 @@ import Header from "@/components/Header";
 import MessageBubble from "@/components/MessageBubble";
 import { UserListType } from "@/type/UserListType";
 import { EmailType } from "@/type/EmailType";
+import { FriendsType } from "@/type/FriendsType";
 
 const UserList: UserListType[] = [
   {
@@ -34,21 +35,34 @@ const UserList: UserListType[] = [
 export default function ChatScreen() {
   const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList); // ← これを追加
   const [emails, setEmails] = useState<EmailType[]>([]);
-  const [selectUser, setSelectUser] = useState<UserListType>({
-    id: 0,
-    name: "",
+  const [selectUser, setSelectUser] = useState<FriendsType>({
+    id: "",
+    userId: "",
+    sender: "",
+    createdAt: "",
   });
+  const [friends, setFriends] = useState<FriendsType[]>([]);
 
   useEffect(() => {
     const fetchEmail = async () => {
-      console.log("fetchかいし")
+      console.log("fetchかいし");
       const res = await fetch("http://localhost:8080/api/email");
-      console.log(res.status)
+      console.log(res.status);
       const data = await res.json();
       setEmails(data);
-      console.log("fetchできました!")
+      console.log("fetchできました!");
     };
     fetchEmail();
+  }, []);
+
+  useEffect(() => {
+    const fetchFriend = async () => {
+      const res = await fetch("http://localhost:8080/api/friend");
+      const data = await res.json();
+      setFriends(data);
+    };
+    fetchFriend();
+    console.log("friend頂き");
   }, []);
 
   return (
@@ -61,18 +75,17 @@ export default function ChatScreen() {
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
-            <FriendSearch userList={UserList} onFilter={setFilteredUsers} />
-              <ScrollArea className="h-full">
-                {filteredUsers.map((user) => (
-                
+              <FriendSearch userList={UserList} onFilter={setFilteredUsers} />
+              <ScrollArea className="h-full ">
+                {friends.map((user) => (
                   <div
                     key={user.id}
                     className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg"
                     onClick={() => {
-                      setSelectUser(user);
+                      setSelectUser(user)
                     }}
                   >
-                    {user.name}
+                    {user.name ? user.name : user.sender}
                   </div>
                 ))}
               </ScrollArea>
@@ -109,7 +122,7 @@ export default function ChatScreen() {
                       content: email,
                       isRead: true,
                       isNotified: true,
-                      createdAt: "2025-05-16"
+                      createdAt: "2025-05-16",
                     },
                   ]);
 

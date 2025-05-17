@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from gmail_sender import send_email
-from api import emails
-
+from api import emails, friends
+import uvicorn
 
 
 app = FastAPI()
@@ -17,6 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(emails.router, prefix="/api", tags=["email"])
+app.include_router(friends.router, prefix="/api", tags=["friend"])
 
 # メール送信用のリクエスト形式
 class EmailRequest(BaseModel):
