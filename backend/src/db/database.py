@@ -3,6 +3,7 @@ from models.email_model import Email
 from models.friend_model import Friend
 from typing import List
 import os
+from fastapi import HTTPException
 
 
 
@@ -51,16 +52,18 @@ def post_friend_to_db(friend: Friend) -> None:
             """
             INSERT INTO friends (id, userId, sender, name, createdAt, customLabel)
             VALUES (?, ?, ?, ?, ?, ?)
-            """ (
+            """ ,
+            (
                 friend.id,
                 friend.userId,
                 friend.sender,
                 friend.name,
-                friend.createdAt,
+                friend.createdAt.strftime('%Y-%m-%d %H:%M:%S'),
                 friend.customLabel
             )
         )
         conn.commit()
-        conn.close()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"登録に失敗しました: {str(e)}")
+    finally:
+        conn.close()

@@ -20,6 +20,8 @@ model User {
   createdAt     DateTime @default(now())              // 登録日時
   emails        Email[] 
   friend        Friend[]
+
+  @@map("users")
 }
 
 model Email {
@@ -45,10 +47,12 @@ model Friend {
   id             String       @id @default(cuid())              // フレンドID
   userId         String                                        // 所有ユーザーID
   sender         String       @unique                          // メールアドレス
-  name           String                                        //  ユーザが自分がつける名前
+  name           String?                                        //  ユーザが自分がつける名前
   createdAt      DateTime     @default(now())                                 //  登録にちじ
   customLabel    String?                                       // ユーザ独自ラベル
 
   user        User   @relation(fields: [userId], references: [id]) //外部キーリレーション
   emails      Email[]
+
+  @@map("friends") 
 }

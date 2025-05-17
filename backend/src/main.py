@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from gmail_sender import send_email
 from api import emails, friends
-
+import uvicorn
 
 
 app = FastAPI()

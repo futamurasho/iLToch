@@ -3528,7 +3528,7 @@ export namespace Prisma {
     id: string
     userId: string
     sender: string
-    name: string
+    name: string | null
     createdAt: Date
     customLabel: string | null
     _count: FriendCountAggregateOutputType | null
@@ -3614,7 +3614,7 @@ export namespace Prisma {
       id: string
       userId: string
       sender: string
-      name: string
+      name: string | null
       createdAt: Date
       customLabel: string | null
     }, ExtArgs["result"]["friend"]>
@@ -4752,7 +4752,7 @@ export namespace Prisma {
     id?: StringFilter<"Friend"> | string
     userId?: StringFilter<"Friend"> | string
     sender?: StringFilter<"Friend"> | string
-    name?: StringFilter<"Friend"> | string
+    name?: StringNullableFilter<"Friend"> | string | null
     createdAt?: DateTimeFilter<"Friend"> | Date | string
     customLabel?: StringNullableFilter<"Friend"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -4763,7 +4763,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     sender?: SortOrder
-    name?: SortOrder
+    name?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     customLabel?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
@@ -4777,7 +4777,7 @@ export namespace Prisma {
     OR?: FriendWhereInput[]
     NOT?: FriendWhereInput | FriendWhereInput[]
     userId?: StringFilter<"Friend"> | string
-    name?: StringFilter<"Friend"> | string
+    name?: StringNullableFilter<"Friend"> | string | null
     createdAt?: DateTimeFilter<"Friend"> | Date | string
     customLabel?: StringNullableFilter<"Friend"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -4788,7 +4788,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     sender?: SortOrder
-    name?: SortOrder
+    name?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     customLabel?: SortOrderInput | SortOrder
     _count?: FriendCountOrderByAggregateInput
@@ -4803,7 +4803,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Friend"> | string
     userId?: StringWithAggregatesFilter<"Friend"> | string
     sender?: StringWithAggregatesFilter<"Friend"> | string
-    name?: StringWithAggregatesFilter<"Friend"> | string
+    name?: StringNullableWithAggregatesFilter<"Friend"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Friend"> | Date | string
     customLabel?: StringNullableWithAggregatesFilter<"Friend"> | string | null
   }
@@ -4985,7 +4985,7 @@ export namespace Prisma {
   export type FriendCreateInput = {
     id?: string
     sender: string
-    name: string
+    name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
     user: UserCreateNestedOneWithoutFriendInput
@@ -4996,7 +4996,7 @@ export namespace Prisma {
     id?: string
     userId: string
     sender: string
-    name: string
+    name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
     emails?: EmailUncheckedCreateNestedManyWithoutFriendInput
@@ -5005,7 +5005,7 @@ export namespace Prisma {
   export type FriendUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutFriendNestedInput
@@ -5016,7 +5016,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: EmailUncheckedUpdateManyWithoutFriendNestedInput
@@ -5026,7 +5026,7 @@ export namespace Prisma {
     id?: string
     userId: string
     sender: string
-    name: string
+    name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
   }
@@ -5034,7 +5034,7 @@ export namespace Prisma {
   export type FriendUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -5043,7 +5043,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -5682,7 +5682,7 @@ export namespace Prisma {
   export type FriendCreateWithoutUserInput = {
     id?: string
     sender: string
-    name: string
+    name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
     emails?: EmailCreateNestedManyWithoutFriendInput
@@ -5691,7 +5691,7 @@ export namespace Prisma {
   export type FriendUncheckedCreateWithoutUserInput = {
     id?: string
     sender: string
-    name: string
+    name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
     emails?: EmailUncheckedCreateNestedManyWithoutFriendInput
@@ -5763,7 +5763,7 @@ export namespace Prisma {
     id?: StringFilter<"Friend"> | string
     userId?: StringFilter<"Friend"> | string
     sender?: StringFilter<"Friend"> | string
-    name?: StringFilter<"Friend"> | string
+    name?: StringNullableFilter<"Friend"> | string | null
     createdAt?: DateTimeFilter<"Friend"> | Date | string
     customLabel?: StringNullableFilter<"Friend"> | string | null
   }
@@ -5796,7 +5796,7 @@ export namespace Prisma {
   export type FriendCreateWithoutEmailsInput = {
     id?: string
     sender: string
-    name: string
+    name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
     user: UserCreateNestedOneWithoutFriendInput
@@ -5806,7 +5806,7 @@ export namespace Prisma {
     id?: string
     userId: string
     sender: string
-    name: string
+    name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
   }
@@ -5861,7 +5861,7 @@ export namespace Prisma {
   export type FriendUpdateWithoutEmailsInput = {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutFriendNestedInput
@@ -5871,7 +5871,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -6002,7 +6002,7 @@ export namespace Prisma {
   export type FriendCreateManyUserInput = {
     id?: string
     sender: string
-    name: string
+    name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
   }
@@ -6052,7 +6052,7 @@ export namespace Prisma {
   export type FriendUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: EmailUpdateManyWithoutFriendNestedInput
@@ -6061,7 +6061,7 @@ export namespace Prisma {
   export type FriendUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: EmailUncheckedUpdateManyWithoutFriendNestedInput
@@ -6070,7 +6070,7 @@ export namespace Prisma {
   export type FriendUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
   }
