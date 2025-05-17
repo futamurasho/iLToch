@@ -1,4 +1,5 @@
 import sqlite3
+from sqlite3 import IntegrityError
 from models.email_model import Email
 from models.friend_model import Friend
 from typing import List
@@ -63,7 +64,34 @@ def post_friend_to_db(friend: Friend) -> None:
             )
         )
         conn.commit()
+    except IntegrityError as e:
+    # UNIQUE制約違反の場合に 409 Conflict を返す
+        raise HTTPException(status_code=409, detail="既に登録済みです")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"登録に失敗しました: {str(e)}")
     finally:
         conn.close()
+
+def get_friend_from_db() -> List[Friend]:
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT id, userId, sender, name, createdAt, customLabel FROM friends"
+    )
+    rows = cursor.fetchall()
+    conn.close()
+
+    friends = []
+    for row in rows:
+        friends.append(
+            Friend(
+                id=row[0],
+                userId=row[1],
+                sender=row[2],
+                name=row[3],
+                createdAt=row[4],
+                customLabel=row[5],
+            )
+        )
+    return friends

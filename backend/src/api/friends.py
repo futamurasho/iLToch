@@ -1,8 +1,9 @@
 from fastapi import APIRouter
 from models.friend_model import Friend, FriendCreate
-from db.database import post_friend_to_db
+from db.database import post_friend_to_db, get_friend_from_db
 from datetime import datetime
 import uuid
+from typing import List
 
 router = APIRouter()
 
@@ -21,3 +22,7 @@ def register_friend(friend_create: FriendCreate):
     print(new_friend)
     post_friend_to_db(new_friend)
     return {"message": "Friend registerd successfully"}
+
+@router.get("/friend", response_model=List[Friend])
+def get_frined():
+    return get_friend_from_db()

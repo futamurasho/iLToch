@@ -39,14 +39,14 @@ model Email {
   createdAt      DateTime @default(now())                 // 登録日時
 
   user           User     @relation(fields: [userId], references: [id]) // 外部キーリレーション
-  friend         Friend   @relation(fields: [sender], references: [sender])
+  friend  Friend   @relation(fields: [userId, sender], references: [userId, sender])
   @@map("emails") // テーブル名を明示（任意）
 }
 
 model Friend {
   id             String       @id @default(cuid())              // フレンドID
   userId         String                                        // 所有ユーザーID
-  sender         String       @unique                          // メールアドレス
+  sender         String                                       // メールアドレス
   name           String?                                        //  ユーザが自分がつける名前
   createdAt      DateTime     @default(now())                                 //  登録にちじ
   customLabel    String?                                       // ユーザ独自ラベル
@@ -55,4 +55,5 @@ model Friend {
   emails      Email[]
 
   @@map("friends") 
+  @@unique([userId, sender])  
 }

@@ -4772,17 +4772,18 @@ export namespace Prisma {
 
   export type FriendWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    sender?: string
+    userId_sender?: FriendUserIdSenderCompoundUniqueInput
     AND?: FriendWhereInput | FriendWhereInput[]
     OR?: FriendWhereInput[]
     NOT?: FriendWhereInput | FriendWhereInput[]
     userId?: StringFilter<"Friend"> | string
+    sender?: StringFilter<"Friend"> | string
     name?: StringNullableFilter<"Friend"> | string | null
     createdAt?: DateTimeFilter<"Friend"> | Date | string
     customLabel?: StringNullableFilter<"Friend"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     emails?: EmailListRelationFilter
-  }, "id" | "sender">
+  }, "id" | "userId_sender">
 
   export type FriendOrderByWithAggregationInput = {
     id?: SortOrder
@@ -5278,6 +5279,11 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type FriendUserIdSenderCompoundUniqueInput = {
+    userId: string
+    sender: string
   }
 
   export type FriendCountOrderByAggregateInput = {
@@ -5917,7 +5923,6 @@ export namespace Prisma {
 
   export type EmailUncheckedCreateWithoutFriendInput = {
     id?: string
-    userId: string
     gmailMessageId: string
     subject?: string | null
     content: string
@@ -6077,7 +6082,6 @@ export namespace Prisma {
 
   export type EmailCreateManyFriendInput = {
     id?: string
-    userId: string
     gmailMessageId: string
     subject?: string | null
     content: string
@@ -6105,7 +6109,6 @@ export namespace Prisma {
 
   export type EmailUncheckedUpdateWithoutFriendInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
@@ -6119,7 +6122,6 @@ export namespace Prisma {
 
   export type EmailUncheckedUpdateManyWithoutFriendInput = {
     id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string

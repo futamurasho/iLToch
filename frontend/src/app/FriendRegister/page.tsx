@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import Header from "@/components/Header";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +14,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   email: z
@@ -23,6 +24,8 @@ const formSchema = z.object({
 });
 
 export default function FriendRegister() {
+    const [message, setMessage] = useState({text: "", errrorFlag: 0});
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,6 +45,14 @@ export default function FriendRegister() {
         sender: values.email,
       }),
     });
+    if (res.status === 409) {
+        setMessage({text: "すでに登録済みのフレンドです。", errrorFlag:1});
+      } else if (res.ok) {
+        setMessage({text:"登録完了しました！", errrorFlag:0});
+        form.reset(); // 入力フォームを初期化
+      } else {
+        setMessage({text: "登録に失敗しました。もう一度お試しください。", errrorFlag:1});
+      }
     const data = await res.json();
     console.log(data);
     return;
@@ -71,6 +82,9 @@ export default function FriendRegister() {
           <Button>フレンド登録</Button>
         </form>
       </Form>
+      {message && (
+        <p className={cn("text-center mt-4 text-lg font-medium", message.errrorFlag == 1 ? "text-red-600" : "text-blue-600")}>{message.text}</p>
+      )}
     </div>
   );
 }
