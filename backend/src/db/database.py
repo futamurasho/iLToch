@@ -64,14 +64,15 @@ def get_emails_from_db() -> List[Email]:
                 userId=row[1],
                 gmailMessageId=row[2],
                 subject=row[3],
-                sender=row[4],
-                content=row[5],
-                snippet=row[6],
-                receivedAt=row[7],
-                isRead=bool(row[8]),
-                isNotified=bool(row[9]),
-                customLabel=row[10],
-                createdAt=row[11],
+                senderAddress=row[4],
+                receiverAddress=row[5],
+                content=row[6],
+                snippet=row[7],
+                receivedAt=row[8],
+                isRead=bool(row[9]),
+                isNotified=bool(row[10]),
+                customLabel=row[11],
+                createdAt=row[12],
             )
         )
     return emails

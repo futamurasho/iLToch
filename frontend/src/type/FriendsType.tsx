@@ -1,7 +1,7 @@
 export type FriendsType = {
     id: string
     userId: string
-    sender: string
+    mailAddress: string
     name?: string
     createdAt:      string   
     customLabel?:    string     

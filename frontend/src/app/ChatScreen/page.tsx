@@ -38,7 +38,7 @@ export default function ChatScreen() {
   const [selectUser, setSelectUser] = useState<FriendsType>({
     id: "",
     userId: "",
-    sender: "",
+    mailAddress: "",
     createdAt: "",
   });
   const [friends, setFriends] = useState<FriendsType[]>([]);
@@ -85,7 +85,7 @@ export default function ChatScreen() {
                       setSelectUser(user)
                     }}
                   >
-                    {user.name ? user.name : user.sender}
+                    {user.name ? user.name : user.mailAddress}
                   </div>
                 ))}
               </ScrollArea>
@@ -101,7 +101,7 @@ export default function ChatScreen() {
      
               <ScrollArea className="h-full">
                 {emails.map((email) => (
-                  <MessageBubble key={email.id} text={email.content} />
+                  <MessageBubble key={email.id} text={email.content} sender={email.senderAddress} />
                 ))}
               </ScrollArea>
             </CardContent>
