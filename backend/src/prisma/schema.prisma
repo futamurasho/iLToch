@@ -29,7 +29,8 @@ model Email {
   userId         String                                      // 所有ユーザーID（外部キー）
   gmailMessageId String   @unique                        // GmailメッセージID（ユニーク）
   subject        String?                                  // メール件名
-  sender           String                                   // 差出人（メールアドレスや名前）
+  senderAddress           String                                   // 差出人（メールアドレスや名前）
+  receiverAddress           String                                   // 差出人（メールアドレスや名前）
   content        String                                   //メールの本文
   snippet        String?                                  // メール本文の冒頭（プレビュー）
   receivedAt     DateTime?                                // メールの受信時刻
@@ -39,21 +40,20 @@ model Email {
   createdAt      DateTime @default(now())                 // 登録日時
 
   user           User     @relation(fields: [userId], references: [id]) // 外部キーリレーション
-  friend  Friend   @relation(fields: [userId, sender], references: [userId, sender])
   @@map("emails") // テーブル名を明示（任意）
 }
 
 model Friend {
   id             String       @id @default(cuid())              // フレンドID
   userId         String                                        // 所有ユーザーID
-  sender         String                                       // メールアドレス
+  emailAddress    String                                       // メールアドレス
   name           String?                                        //  ユーザが自分がつける名前
   createdAt      DateTime     @default(now())                                 //  登録にちじ
   customLabel    String?                                       // ユーザ独自ラベル
 
   user        User   @relation(fields: [userId], references: [id]) //外部キーリレーション
-  emails      Email[]
+
 
   @@map("friends") 
-  @@unique([userId, sender])  
+  @@unique([userId, emailAddress])  
 }

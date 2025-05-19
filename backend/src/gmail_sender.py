@@ -5,6 +5,10 @@ import os
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 import json
+from db.database import send_emails_to_db
+from datetime import datetime
+from models.email_model import Email
+import uuid
 
 SCOPES = ['https://mail.google.com/']
 
@@ -42,3 +46,21 @@ def send_email(to, subject, body_text,access_token):
 
     send_message = service.users().messages().send(userId="me", body=create_message).execute()
     print(f"Message sent. ID: {send_message['id']}")
+    gmail_message_id = send_message["id"]
+    now = datetime.now()
+    email = Email(
+        id=str(uuid.uuid4()),
+        userId="a",  #本当はsession user
+        senderAddress="me", #本当はsession userのmailaddress
+        receiverAddress=to,  # GmailのFromアドレスを取得する場合は別途取得可能
+        content=body_text,
+        gmailMessageId=gmail_message_id,
+        receivedAt=now,
+        subject=subject,
+        snippet=body_text[:100],  # 冒頭部分
+        isRead=True,
+        isNotified=False,
+        createdAt=now,
+        customLabel="sent"
+    )
+    send_emails_to_db(email)

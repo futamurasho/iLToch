@@ -8,3 +8,4 @@ router = APIRouter()
 @router.get("/email",  response_model=List[Email])
 def read_emails():
     return get_emails_from_db()
+

@@ -5,7 +5,7 @@ from datetime import datetime
 
 class FriendCreate(BaseModel):
     userId: str
-    sender: str 
+    emailAddress: str 
     name: Optional[str] = None
     customLabel: Optional[str] = None
 class Friend(FriendCreate):

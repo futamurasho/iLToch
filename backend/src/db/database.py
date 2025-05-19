@@ -11,6 +11,37 @@ from fastapi import HTTPException
 
 DB_PATH = "prisma/dev.db"
 
+def send_emails_to_db(email: Email):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            """
+            INSERT INTO emails (id, userId, senderAddress, receiverAddress, content, gmailMessageId, receivedAt, subject, snippet, isRead, isNotified, createdAt, customLabel)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """ ,
+            (
+                email.id,
+                email.userId,
+                email.senderAddress,
+                email.receiverAddress,
+                email.content,
+                email.gmailMessageId,
+                email.receivedAt.strftime('%Y-%m-%d %H:%M:%S'),
+                email.subject,
+                email.snippet,
+                email.isRead,
+                email.isNotified,
+                email.createdAt.strftime('%Y-%m-%d %H:%M:%S'),
+                email.customLabel
+            )
+        )
+        conn.commit()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"登録に失敗しました: {str(e)}")
+    finally:
+        conn.close()
+        
 
 def get_emails_from_db() -> List[Email]:
     print("=== DEBUG START ===")
@@ -20,7 +51,7 @@ def get_emails_from_db() -> List[Email]:
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT id, userId, gmailMessageId, subject, sender, content, snippet, receivedAt, isRead, isNotified, customLabel, createdAt FROM emails"
+        "SELECT id, userId, gmailMessageId, subject, senderAddress, receiverAddress, content, snippet, receivedAt, isRead, isNotified, customLabel, createdAt FROM emails"
     )
     rows = cursor.fetchall()
     conn.close()
@@ -51,13 +82,13 @@ def post_friend_to_db(friend: Friend) -> None:
     try:
         cursor.execute(
             """
-            INSERT INTO friends (id, userId, sender, name, createdAt, customLabel)
+            INSERT INTO friends (id, userId, emailAddress, name, createdAt, customLabel)
             VALUES (?, ?, ?, ?, ?, ?)
             """ ,
             (
                 friend.id,
                 friend.userId,
-                friend.sender,
+                friend.emailAddress,
                 friend.name,
                 friend.createdAt.strftime('%Y-%m-%d %H:%M:%S'),
                 friend.customLabel
@@ -77,7 +108,7 @@ def get_friend_from_db() -> List[Friend]:
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT id, userId, sender, name, createdAt, customLabel FROM friends"
+        "SELECT id, userId, emailAddress, name, createdAt, customLabel FROM friends"
     )
     rows = cursor.fetchall()
     conn.close()
@@ -88,7 +119,7 @@ def get_friend_from_db() -> List[Friend]:
             Friend(
                 id=row[0],
                 userId=row[1],
-                sender=row[2],
+                emailAddress=row[2],
                 name=row[3],
                 createdAt=row[4],
                 customLabel=row[5],
