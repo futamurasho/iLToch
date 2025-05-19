@@ -2245,7 +2245,8 @@ export namespace Prisma {
     userId: string | null
     gmailMessageId: string | null
     subject: string | null
-    sender: string | null
+    senderAddress: string | null
+    receiverAddress: string | null
     content: string | null
     snippet: string | null
     receivedAt: Date | null
@@ -2260,7 +2261,8 @@ export namespace Prisma {
     userId: string | null
     gmailMessageId: string | null
     subject: string | null
-    sender: string | null
+    senderAddress: string | null
+    receiverAddress: string | null
     content: string | null
     snippet: string | null
     receivedAt: Date | null
@@ -2275,7 +2277,8 @@ export namespace Prisma {
     userId: number
     gmailMessageId: number
     subject: number
-    sender: number
+    senderAddress: number
+    receiverAddress: number
     content: number
     snippet: number
     receivedAt: number
@@ -2292,7 +2295,8 @@ export namespace Prisma {
     userId?: true
     gmailMessageId?: true
     subject?: true
-    sender?: true
+    senderAddress?: true
+    receiverAddress?: true
     content?: true
     snippet?: true
     receivedAt?: true
@@ -2307,7 +2311,8 @@ export namespace Prisma {
     userId?: true
     gmailMessageId?: true
     subject?: true
-    sender?: true
+    senderAddress?: true
+    receiverAddress?: true
     content?: true
     snippet?: true
     receivedAt?: true
@@ -2322,7 +2327,8 @@ export namespace Prisma {
     userId?: true
     gmailMessageId?: true
     subject?: true
-    sender?: true
+    senderAddress?: true
+    receiverAddress?: true
     content?: true
     snippet?: true
     receivedAt?: true
@@ -2410,7 +2416,8 @@ export namespace Prisma {
     userId: string
     gmailMessageId: string
     subject: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet: string | null
     receivedAt: Date | null
@@ -2442,7 +2449,8 @@ export namespace Prisma {
     userId?: boolean
     gmailMessageId?: boolean
     subject?: boolean
-    sender?: boolean
+    senderAddress?: boolean
+    receiverAddress?: boolean
     content?: boolean
     snippet?: boolean
     receivedAt?: boolean
@@ -2459,7 +2467,8 @@ export namespace Prisma {
     userId?: boolean
     gmailMessageId?: boolean
     subject?: boolean
-    sender?: boolean
+    senderAddress?: boolean
+    receiverAddress?: boolean
     content?: boolean
     snippet?: boolean
     receivedAt?: boolean
@@ -2476,7 +2485,8 @@ export namespace Prisma {
     userId?: boolean
     gmailMessageId?: boolean
     subject?: boolean
-    sender?: boolean
+    senderAddress?: boolean
+    receiverAddress?: boolean
     content?: boolean
     snippet?: boolean
     receivedAt?: boolean
@@ -2493,7 +2503,8 @@ export namespace Prisma {
     userId?: boolean
     gmailMessageId?: boolean
     subject?: boolean
-    sender?: boolean
+    senderAddress?: boolean
+    receiverAddress?: boolean
     content?: boolean
     snippet?: boolean
     receivedAt?: boolean
@@ -2503,7 +2514,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type EmailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "gmailMessageId" | "subject" | "sender" | "content" | "snippet" | "receivedAt" | "isRead" | "isNotified" | "customLabel" | "createdAt", ExtArgs["result"]["email"]>
+  export type EmailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "gmailMessageId" | "subject" | "senderAddress" | "receiverAddress" | "content" | "snippet" | "receivedAt" | "isRead" | "isNotified" | "customLabel" | "createdAt", ExtArgs["result"]["email"]>
   export type EmailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     friend?: boolean | FriendDefaultArgs<ExtArgs>
@@ -2528,7 +2539,8 @@ export namespace Prisma {
       userId: string
       gmailMessageId: string
       subject: string | null
-      sender: string
+      senderAddress: string
+      receiverAddress: string
       content: string
       snippet: string | null
       receivedAt: Date | null
@@ -2965,7 +2977,8 @@ export namespace Prisma {
     readonly userId: FieldRef<"Email", 'String'>
     readonly gmailMessageId: FieldRef<"Email", 'String'>
     readonly subject: FieldRef<"Email", 'String'>
-    readonly sender: FieldRef<"Email", 'String'>
+    readonly senderAddress: FieldRef<"Email", 'String'>
+    readonly receiverAddress: FieldRef<"Email", 'String'>
     readonly content: FieldRef<"Email", 'String'>
     readonly snippet: FieldRef<"Email", 'String'>
     readonly receivedAt: FieldRef<"Email", 'DateTime'>
@@ -4512,7 +4525,8 @@ export namespace Prisma {
     userId: 'userId',
     gmailMessageId: 'gmailMessageId',
     subject: 'subject',
-    sender: 'sender',
+    senderAddress: 'senderAddress',
+    receiverAddress: 'receiverAddress',
     content: 'content',
     snippet: 'snippet',
     receivedAt: 'receivedAt',
@@ -4660,7 +4674,8 @@ export namespace Prisma {
     userId?: StringFilter<"Email"> | string
     gmailMessageId?: StringFilter<"Email"> | string
     subject?: StringNullableFilter<"Email"> | string | null
-    sender?: StringFilter<"Email"> | string
+    senderAddress?: StringFilter<"Email"> | string
+    receiverAddress?: StringFilter<"Email"> | string
     content?: StringFilter<"Email"> | string
     snippet?: StringNullableFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableFilter<"Email"> | Date | string | null
@@ -4677,7 +4692,8 @@ export namespace Prisma {
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrderInput | SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrderInput | SortOrder
     receivedAt?: SortOrderInput | SortOrder
@@ -4697,7 +4713,8 @@ export namespace Prisma {
     NOT?: EmailWhereInput | EmailWhereInput[]
     userId?: StringFilter<"Email"> | string
     subject?: StringNullableFilter<"Email"> | string | null
-    sender?: StringFilter<"Email"> | string
+    senderAddress?: StringFilter<"Email"> | string
+    receiverAddress?: StringFilter<"Email"> | string
     content?: StringFilter<"Email"> | string
     snippet?: StringNullableFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableFilter<"Email"> | Date | string | null
@@ -4714,7 +4731,8 @@ export namespace Prisma {
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrderInput | SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrderInput | SortOrder
     receivedAt?: SortOrderInput | SortOrder
@@ -4735,7 +4753,8 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Email"> | string
     gmailMessageId?: StringWithAggregatesFilter<"Email"> | string
     subject?: StringNullableWithAggregatesFilter<"Email"> | string | null
-    sender?: StringWithAggregatesFilter<"Email"> | string
+    senderAddress?: StringWithAggregatesFilter<"Email"> | string
+    receiverAddress?: StringWithAggregatesFilter<"Email"> | string
     content?: StringWithAggregatesFilter<"Email"> | string
     snippet?: StringNullableWithAggregatesFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableWithAggregatesFilter<"Email"> | Date | string | null
@@ -4884,6 +4903,7 @@ export namespace Prisma {
     id?: string
     gmailMessageId: string
     subject?: string | null
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -4900,7 +4920,8 @@ export namespace Prisma {
     userId: string
     gmailMessageId: string
     subject?: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -4914,6 +4935,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4930,7 +4952,8 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
-    sender?: StringFieldUpdateOperationsInput | string
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4945,7 +4968,8 @@ export namespace Prisma {
     userId: string
     gmailMessageId: string
     subject?: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -4959,6 +4983,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4973,7 +4998,8 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
-    sender?: StringFieldUpdateOperationsInput | string
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5216,7 +5242,8 @@ export namespace Prisma {
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrder
     receivedAt?: SortOrder
@@ -5231,7 +5258,8 @@ export namespace Prisma {
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrder
     receivedAt?: SortOrder
@@ -5246,7 +5274,8 @@ export namespace Prisma {
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrder
     receivedAt?: SortOrder
@@ -5652,6 +5681,7 @@ export namespace Prisma {
     id?: string
     gmailMessageId: string
     subject?: string | null
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -5666,7 +5696,8 @@ export namespace Prisma {
     id?: string
     gmailMessageId: string
     subject?: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -5736,7 +5767,8 @@ export namespace Prisma {
     userId?: StringFilter<"Email"> | string
     gmailMessageId?: StringFilter<"Email"> | string
     subject?: StringNullableFilter<"Email"> | string | null
-    sender?: StringFilter<"Email"> | string
+    senderAddress?: StringFilter<"Email"> | string
+    receiverAddress?: StringFilter<"Email"> | string
     content?: StringFilter<"Email"> | string
     snippet?: StringNullableFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableFilter<"Email"> | Date | string | null
@@ -5911,6 +5943,7 @@ export namespace Prisma {
     id?: string
     gmailMessageId: string
     subject?: string | null
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -5925,6 +5958,7 @@ export namespace Prisma {
     id?: string
     gmailMessageId: string
     subject?: string | null
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -5994,7 +6028,8 @@ export namespace Prisma {
     id?: string
     gmailMessageId: string
     subject?: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -6016,6 +6051,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6030,7 +6066,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
-    sender?: StringFieldUpdateOperationsInput | string
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6044,7 +6081,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
-    sender?: StringFieldUpdateOperationsInput | string
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6084,6 +6122,7 @@ export namespace Prisma {
     id?: string
     gmailMessageId: string
     subject?: string | null
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -6097,6 +6136,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6111,6 +6151,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6124,6 +6165,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

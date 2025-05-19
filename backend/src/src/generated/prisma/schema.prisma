@@ -25,23 +25,24 @@ model User {
 }
 
 model Email {
-  id             String    @id @default(cuid()) // メールID（自動採番）
-  userId         String // 所有ユーザーID（外部キー）
-  gmailMessageId String    @unique // GmailメッセージID（ユニーク）
-  subject        String? // メール件名
-  sender         String // 差出人（メールアドレスや名前）
-  content        String //メールの本文
-  snippet        String? // メール本文の冒頭（プレビュー）
-  receivedAt     DateTime? // メールの受信時刻
-  isRead         Boolean   @default(false) // 既読状態
-  isNotified     Boolean   @default(false) // 通知済みかどうか
-  customLabel    String? // ユーザー独自ラベル
-  createdAt      DateTime  @default(now()) // 登録日時
+  id              String    @id @default(cuid()) // メールID（自動採番）
+  userId          String // 所有ユーザーID（外部キー）
+  gmailMessageId  String    @unique // GmailメッセージID（ユニーク）
+  subject         String? // メール件名
+  senderAddress   String // 差出人（メールアドレスや名前）
+  receiverAddress String // 受取人（メールアドレスや名前）
+  content         String // メールの本文
+  snippet         String? // メール本文の冒頭（プレビュー）
+  receivedAt      DateTime? // メールの受信時刻
+  isRead          Boolean   @default(false) // 既読状態
+  isNotified      Boolean   @default(false) // 通知済みかどうか
+  customLabel     String? // ユーザー独自ラベル
+  createdAt       DateTime  @default(now()) // 登録日時
 
-  user   User   @relation(fields: [userId], references: [id]) // 外部キーリレーション
-  friend Friend @relation(fields: [userId, sender], references: [userId, sender])
+  user   User   @relation(fields: [userId], references: [id])
+  friend Friend @relation(fields: [userId, senderAddress], references: [userId, sender])
 
-  @@map("emails") // テーブル名を明示（任意）
+  @@map("emails")
 }
 
 model Friend {
