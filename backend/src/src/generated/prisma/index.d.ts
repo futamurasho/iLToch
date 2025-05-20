@@ -1087,37 +1087,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type FriendCountOutputType
-   */
-
-  export type FriendCountOutputType = {
-    emails: number
-  }
-
-  export type FriendCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emails?: boolean | FriendCountOutputTypeCountEmailsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * FriendCountOutputType without action
-   */
-  export type FriendCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FriendCountOutputType
-     */
-    select?: FriendCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * FriendCountOutputType without action
-   */
-  export type FriendCountOutputTypeCountEmailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: EmailWhereInput
-  }
-
-
-  /**
    * Models
    */
 
@@ -2245,7 +2214,8 @@ export namespace Prisma {
     userId: string | null
     gmailMessageId: string | null
     subject: string | null
-    sender: string | null
+    senderAddress: string | null
+    receiverAddress: string | null
     content: string | null
     snippet: string | null
     receivedAt: Date | null
@@ -2260,7 +2230,8 @@ export namespace Prisma {
     userId: string | null
     gmailMessageId: string | null
     subject: string | null
-    sender: string | null
+    senderAddress: string | null
+    receiverAddress: string | null
     content: string | null
     snippet: string | null
     receivedAt: Date | null
@@ -2275,7 +2246,8 @@ export namespace Prisma {
     userId: number
     gmailMessageId: number
     subject: number
-    sender: number
+    senderAddress: number
+    receiverAddress: number
     content: number
     snippet: number
     receivedAt: number
@@ -2292,7 +2264,8 @@ export namespace Prisma {
     userId?: true
     gmailMessageId?: true
     subject?: true
-    sender?: true
+    senderAddress?: true
+    receiverAddress?: true
     content?: true
     snippet?: true
     receivedAt?: true
@@ -2307,7 +2280,8 @@ export namespace Prisma {
     userId?: true
     gmailMessageId?: true
     subject?: true
-    sender?: true
+    senderAddress?: true
+    receiverAddress?: true
     content?: true
     snippet?: true
     receivedAt?: true
@@ -2322,7 +2296,8 @@ export namespace Prisma {
     userId?: true
     gmailMessageId?: true
     subject?: true
-    sender?: true
+    senderAddress?: true
+    receiverAddress?: true
     content?: true
     snippet?: true
     receivedAt?: true
@@ -2410,7 +2385,8 @@ export namespace Prisma {
     userId: string
     gmailMessageId: string
     subject: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet: string | null
     receivedAt: Date | null
@@ -2442,7 +2418,8 @@ export namespace Prisma {
     userId?: boolean
     gmailMessageId?: boolean
     subject?: boolean
-    sender?: boolean
+    senderAddress?: boolean
+    receiverAddress?: boolean
     content?: boolean
     snippet?: boolean
     receivedAt?: boolean
@@ -2451,7 +2428,6 @@ export namespace Prisma {
     customLabel?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-    friend?: boolean | FriendDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["email"]>
 
   export type EmailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2459,7 +2435,8 @@ export namespace Prisma {
     userId?: boolean
     gmailMessageId?: boolean
     subject?: boolean
-    sender?: boolean
+    senderAddress?: boolean
+    receiverAddress?: boolean
     content?: boolean
     snippet?: boolean
     receivedAt?: boolean
@@ -2468,7 +2445,6 @@ export namespace Prisma {
     customLabel?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-    friend?: boolean | FriendDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["email"]>
 
   export type EmailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2476,7 +2452,8 @@ export namespace Prisma {
     userId?: boolean
     gmailMessageId?: boolean
     subject?: boolean
-    sender?: boolean
+    senderAddress?: boolean
+    receiverAddress?: boolean
     content?: boolean
     snippet?: boolean
     receivedAt?: boolean
@@ -2485,7 +2462,6 @@ export namespace Prisma {
     customLabel?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-    friend?: boolean | FriendDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["email"]>
 
   export type EmailSelectScalar = {
@@ -2493,7 +2469,8 @@ export namespace Prisma {
     userId?: boolean
     gmailMessageId?: boolean
     subject?: boolean
-    sender?: boolean
+    senderAddress?: boolean
+    receiverAddress?: boolean
     content?: boolean
     snippet?: boolean
     receivedAt?: boolean
@@ -2503,32 +2480,29 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type EmailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "gmailMessageId" | "subject" | "sender" | "content" | "snippet" | "receivedAt" | "isRead" | "isNotified" | "customLabel" | "createdAt", ExtArgs["result"]["email"]>
+  export type EmailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "gmailMessageId" | "subject" | "senderAddress" | "receiverAddress" | "content" | "snippet" | "receivedAt" | "isRead" | "isNotified" | "customLabel" | "createdAt", ExtArgs["result"]["email"]>
   export type EmailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
-    friend?: boolean | FriendDefaultArgs<ExtArgs>
   }
   export type EmailIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
-    friend?: boolean | FriendDefaultArgs<ExtArgs>
   }
   export type EmailIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
-    friend?: boolean | FriendDefaultArgs<ExtArgs>
   }
 
   export type $EmailPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Email"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
-      friend: Prisma.$FriendPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
       gmailMessageId: string
       subject: string | null
-      sender: string
+      senderAddress: string
+      receiverAddress: string
       content: string
       snippet: string | null
       receivedAt: Date | null
@@ -2931,7 +2905,6 @@ export namespace Prisma {
   export interface Prisma__EmailClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    friend<T extends FriendDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FriendDefaultArgs<ExtArgs>>): Prisma__FriendClient<$Result.GetResult<Prisma.$FriendPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2965,7 +2938,8 @@ export namespace Prisma {
     readonly userId: FieldRef<"Email", 'String'>
     readonly gmailMessageId: FieldRef<"Email", 'String'>
     readonly subject: FieldRef<"Email", 'String'>
-    readonly sender: FieldRef<"Email", 'String'>
+    readonly senderAddress: FieldRef<"Email", 'String'>
+    readonly receiverAddress: FieldRef<"Email", 'String'>
     readonly content: FieldRef<"Email", 'String'>
     readonly snippet: FieldRef<"Email", 'String'>
     readonly receivedAt: FieldRef<"Email", 'DateTime'>
@@ -3398,7 +3372,7 @@ export namespace Prisma {
   export type FriendMinAggregateOutputType = {
     id: string | null
     userId: string | null
-    sender: string | null
+    emailAddress: string | null
     name: string | null
     createdAt: Date | null
     customLabel: string | null
@@ -3407,7 +3381,7 @@ export namespace Prisma {
   export type FriendMaxAggregateOutputType = {
     id: string | null
     userId: string | null
-    sender: string | null
+    emailAddress: string | null
     name: string | null
     createdAt: Date | null
     customLabel: string | null
@@ -3416,7 +3390,7 @@ export namespace Prisma {
   export type FriendCountAggregateOutputType = {
     id: number
     userId: number
-    sender: number
+    emailAddress: number
     name: number
     createdAt: number
     customLabel: number
@@ -3427,7 +3401,7 @@ export namespace Prisma {
   export type FriendMinAggregateInputType = {
     id?: true
     userId?: true
-    sender?: true
+    emailAddress?: true
     name?: true
     createdAt?: true
     customLabel?: true
@@ -3436,7 +3410,7 @@ export namespace Prisma {
   export type FriendMaxAggregateInputType = {
     id?: true
     userId?: true
-    sender?: true
+    emailAddress?: true
     name?: true
     createdAt?: true
     customLabel?: true
@@ -3445,7 +3419,7 @@ export namespace Prisma {
   export type FriendCountAggregateInputType = {
     id?: true
     userId?: true
-    sender?: true
+    emailAddress?: true
     name?: true
     createdAt?: true
     customLabel?: true
@@ -3527,7 +3501,7 @@ export namespace Prisma {
   export type FriendGroupByOutputType = {
     id: string
     userId: string
-    sender: string
+    emailAddress: string
     name: string | null
     createdAt: Date
     customLabel: string | null
@@ -3553,19 +3527,17 @@ export namespace Prisma {
   export type FriendSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    sender?: boolean
+    emailAddress?: boolean
     name?: boolean
     createdAt?: boolean
     customLabel?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
-    emails?: boolean | Friend$emailsArgs<ExtArgs>
-    _count?: boolean | FriendCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["friend"]>
 
   export type FriendSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    sender?: boolean
+    emailAddress?: boolean
     name?: boolean
     createdAt?: boolean
     customLabel?: boolean
@@ -3575,7 +3547,7 @@ export namespace Prisma {
   export type FriendSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    sender?: boolean
+    emailAddress?: boolean
     name?: boolean
     createdAt?: boolean
     customLabel?: boolean
@@ -3585,17 +3557,15 @@ export namespace Prisma {
   export type FriendSelectScalar = {
     id?: boolean
     userId?: boolean
-    sender?: boolean
+    emailAddress?: boolean
     name?: boolean
     createdAt?: boolean
     customLabel?: boolean
   }
 
-  export type FriendOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "sender" | "name" | "createdAt" | "customLabel", ExtArgs["result"]["friend"]>
+  export type FriendOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "emailAddress" | "name" | "createdAt" | "customLabel", ExtArgs["result"]["friend"]>
   export type FriendInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
-    emails?: boolean | Friend$emailsArgs<ExtArgs>
-    _count?: boolean | FriendCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FriendIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3608,12 +3578,11 @@ export namespace Prisma {
     name: "Friend"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
-      emails: Prisma.$EmailPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
-      sender: string
+      emailAddress: string
       name: string | null
       createdAt: Date
       customLabel: string | null
@@ -4012,7 +3981,6 @@ export namespace Prisma {
   export interface Prisma__FriendClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    emails<T extends Friend$emailsArgs<ExtArgs> = {}>(args?: Subset<T, Friend$emailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4044,7 +4012,7 @@ export namespace Prisma {
   interface FriendFieldRefs {
     readonly id: FieldRef<"Friend", 'String'>
     readonly userId: FieldRef<"Friend", 'String'>
-    readonly sender: FieldRef<"Friend", 'String'>
+    readonly emailAddress: FieldRef<"Friend", 'String'>
     readonly name: FieldRef<"Friend", 'String'>
     readonly createdAt: FieldRef<"Friend", 'DateTime'>
     readonly customLabel: FieldRef<"Friend", 'String'>
@@ -4442,30 +4410,6 @@ export namespace Prisma {
   }
 
   /**
-   * Friend.emails
-   */
-  export type Friend$emailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Email
-     */
-    select?: EmailSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Email
-     */
-    omit?: EmailOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EmailInclude<ExtArgs> | null
-    where?: EmailWhereInput
-    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
-    cursor?: EmailWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: EmailScalarFieldEnum | EmailScalarFieldEnum[]
-  }
-
-  /**
    * Friend without action
    */
   export type FriendDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4512,7 +4456,8 @@ export namespace Prisma {
     userId: 'userId',
     gmailMessageId: 'gmailMessageId',
     subject: 'subject',
-    sender: 'sender',
+    senderAddress: 'senderAddress',
+    receiverAddress: 'receiverAddress',
     content: 'content',
     snippet: 'snippet',
     receivedAt: 'receivedAt',
@@ -4528,7 +4473,7 @@ export namespace Prisma {
   export const FriendScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
-    sender: 'sender',
+    emailAddress: 'emailAddress',
     name: 'name',
     createdAt: 'createdAt',
     customLabel: 'customLabel'
@@ -4660,7 +4605,8 @@ export namespace Prisma {
     userId?: StringFilter<"Email"> | string
     gmailMessageId?: StringFilter<"Email"> | string
     subject?: StringNullableFilter<"Email"> | string | null
-    sender?: StringFilter<"Email"> | string
+    senderAddress?: StringFilter<"Email"> | string
+    receiverAddress?: StringFilter<"Email"> | string
     content?: StringFilter<"Email"> | string
     snippet?: StringNullableFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableFilter<"Email"> | Date | string | null
@@ -4669,7 +4615,6 @@ export namespace Prisma {
     customLabel?: StringNullableFilter<"Email"> | string | null
     createdAt?: DateTimeFilter<"Email"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    friend?: XOR<FriendScalarRelationFilter, FriendWhereInput>
   }
 
   export type EmailOrderByWithRelationInput = {
@@ -4677,7 +4622,8 @@ export namespace Prisma {
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrderInput | SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrderInput | SortOrder
     receivedAt?: SortOrderInput | SortOrder
@@ -4686,7 +4632,6 @@ export namespace Prisma {
     customLabel?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
-    friend?: FriendOrderByWithRelationInput
   }
 
   export type EmailWhereUniqueInput = Prisma.AtLeast<{
@@ -4697,7 +4642,8 @@ export namespace Prisma {
     NOT?: EmailWhereInput | EmailWhereInput[]
     userId?: StringFilter<"Email"> | string
     subject?: StringNullableFilter<"Email"> | string | null
-    sender?: StringFilter<"Email"> | string
+    senderAddress?: StringFilter<"Email"> | string
+    receiverAddress?: StringFilter<"Email"> | string
     content?: StringFilter<"Email"> | string
     snippet?: StringNullableFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableFilter<"Email"> | Date | string | null
@@ -4706,7 +4652,6 @@ export namespace Prisma {
     customLabel?: StringNullableFilter<"Email"> | string | null
     createdAt?: DateTimeFilter<"Email"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    friend?: XOR<FriendScalarRelationFilter, FriendWhereInput>
   }, "id" | "gmailMessageId">
 
   export type EmailOrderByWithAggregationInput = {
@@ -4714,7 +4659,8 @@ export namespace Prisma {
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrderInput | SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrderInput | SortOrder
     receivedAt?: SortOrderInput | SortOrder
@@ -4735,7 +4681,8 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Email"> | string
     gmailMessageId?: StringWithAggregatesFilter<"Email"> | string
     subject?: StringNullableWithAggregatesFilter<"Email"> | string | null
-    sender?: StringWithAggregatesFilter<"Email"> | string
+    senderAddress?: StringWithAggregatesFilter<"Email"> | string
+    receiverAddress?: StringWithAggregatesFilter<"Email"> | string
     content?: StringWithAggregatesFilter<"Email"> | string
     snippet?: StringNullableWithAggregatesFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableWithAggregatesFilter<"Email"> | Date | string | null
@@ -4751,44 +4698,41 @@ export namespace Prisma {
     NOT?: FriendWhereInput | FriendWhereInput[]
     id?: StringFilter<"Friend"> | string
     userId?: StringFilter<"Friend"> | string
-    sender?: StringFilter<"Friend"> | string
+    emailAddress?: StringFilter<"Friend"> | string
     name?: StringNullableFilter<"Friend"> | string | null
     createdAt?: DateTimeFilter<"Friend"> | Date | string
     customLabel?: StringNullableFilter<"Friend"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    emails?: EmailListRelationFilter
   }
 
   export type FriendOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
-    sender?: SortOrder
+    emailAddress?: SortOrder
     name?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     customLabel?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
-    emails?: EmailOrderByRelationAggregateInput
   }
 
   export type FriendWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    userId_sender?: FriendUserIdSenderCompoundUniqueInput
+    userId_emailAddress?: FriendUserIdEmailAddressCompoundUniqueInput
     AND?: FriendWhereInput | FriendWhereInput[]
     OR?: FriendWhereInput[]
     NOT?: FriendWhereInput | FriendWhereInput[]
     userId?: StringFilter<"Friend"> | string
-    sender?: StringFilter<"Friend"> | string
+    emailAddress?: StringFilter<"Friend"> | string
     name?: StringNullableFilter<"Friend"> | string | null
     createdAt?: DateTimeFilter<"Friend"> | Date | string
     customLabel?: StringNullableFilter<"Friend"> | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    emails?: EmailListRelationFilter
-  }, "id" | "userId_sender">
+  }, "id" | "userId_emailAddress">
 
   export type FriendOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
-    sender?: SortOrder
+    emailAddress?: SortOrder
     name?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     customLabel?: SortOrderInput | SortOrder
@@ -4803,7 +4747,7 @@ export namespace Prisma {
     NOT?: FriendScalarWhereWithAggregatesInput | FriendScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Friend"> | string
     userId?: StringWithAggregatesFilter<"Friend"> | string
-    sender?: StringWithAggregatesFilter<"Friend"> | string
+    emailAddress?: StringWithAggregatesFilter<"Friend"> | string
     name?: StringNullableWithAggregatesFilter<"Friend"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Friend"> | Date | string
     customLabel?: StringNullableWithAggregatesFilter<"Friend"> | string | null
@@ -4884,6 +4828,8 @@ export namespace Prisma {
     id?: string
     gmailMessageId: string
     subject?: string | null
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -4892,7 +4838,6 @@ export namespace Prisma {
     customLabel?: string | null
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutEmailsInput
-    friend: FriendCreateNestedOneWithoutEmailsInput
   }
 
   export type EmailUncheckedCreateInput = {
@@ -4900,7 +4845,8 @@ export namespace Prisma {
     userId: string
     gmailMessageId: string
     subject?: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -4914,6 +4860,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4922,7 +4870,6 @@ export namespace Prisma {
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEmailsNestedInput
-    friend?: FriendUpdateOneRequiredWithoutEmailsNestedInput
   }
 
   export type EmailUncheckedUpdateInput = {
@@ -4930,7 +4877,8 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
-    sender?: StringFieldUpdateOperationsInput | string
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4945,7 +4893,8 @@ export namespace Prisma {
     userId: string
     gmailMessageId: string
     subject?: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -4959,6 +4908,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4973,7 +4924,8 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
-    sender?: StringFieldUpdateOperationsInput | string
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4985,48 +4937,44 @@ export namespace Prisma {
 
   export type FriendCreateInput = {
     id?: string
-    sender: string
+    emailAddress: string
     name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
     user: UserCreateNestedOneWithoutFriendInput
-    emails?: EmailCreateNestedManyWithoutFriendInput
   }
 
   export type FriendUncheckedCreateInput = {
     id?: string
     userId: string
-    sender: string
+    emailAddress: string
     name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
-    emails?: EmailUncheckedCreateNestedManyWithoutFriendInput
   }
 
   export type FriendUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    emailAddress?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneRequiredWithoutFriendNestedInput
-    emails?: EmailUpdateManyWithoutFriendNestedInput
   }
 
   export type FriendUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    emailAddress?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    emails?: EmailUncheckedUpdateManyWithoutFriendNestedInput
   }
 
   export type FriendCreateManyInput = {
     id?: string
     userId: string
-    sender: string
+    emailAddress: string
     name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
@@ -5034,7 +4982,7 @@ export namespace Prisma {
 
   export type FriendUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    emailAddress?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5043,7 +4991,7 @@ export namespace Prisma {
   export type FriendUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    emailAddress?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5206,17 +5154,13 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
-  export type FriendScalarRelationFilter = {
-    is?: FriendWhereInput
-    isNot?: FriendWhereInput
-  }
-
   export type EmailCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrder
     receivedAt?: SortOrder
@@ -5231,7 +5175,8 @@ export namespace Prisma {
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrder
     receivedAt?: SortOrder
@@ -5246,7 +5191,8 @@ export namespace Prisma {
     userId?: SortOrder
     gmailMessageId?: SortOrder
     subject?: SortOrder
-    sender?: SortOrder
+    senderAddress?: SortOrder
+    receiverAddress?: SortOrder
     content?: SortOrder
     snippet?: SortOrder
     receivedAt?: SortOrder
@@ -5281,15 +5227,15 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type FriendUserIdSenderCompoundUniqueInput = {
+  export type FriendUserIdEmailAddressCompoundUniqueInput = {
     userId: string
-    sender: string
+    emailAddress: string
   }
 
   export type FriendCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    sender?: SortOrder
+    emailAddress?: SortOrder
     name?: SortOrder
     createdAt?: SortOrder
     customLabel?: SortOrder
@@ -5298,7 +5244,7 @@ export namespace Prisma {
   export type FriendMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    sender?: SortOrder
+    emailAddress?: SortOrder
     name?: SortOrder
     createdAt?: SortOrder
     customLabel?: SortOrder
@@ -5307,7 +5253,7 @@ export namespace Prisma {
   export type FriendMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    sender?: SortOrder
+    emailAddress?: SortOrder
     name?: SortOrder
     createdAt?: SortOrder
     customLabel?: SortOrder
@@ -5415,12 +5361,6 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type FriendCreateNestedOneWithoutEmailsInput = {
-    create?: XOR<FriendCreateWithoutEmailsInput, FriendUncheckedCreateWithoutEmailsInput>
-    connectOrCreate?: FriendCreateOrConnectWithoutEmailsInput
-    connect?: FriendWhereUniqueInput
-  }
-
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
@@ -5437,32 +5377,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEmailsInput, UserUpdateWithoutEmailsInput>, UserUncheckedUpdateWithoutEmailsInput>
   }
 
-  export type FriendUpdateOneRequiredWithoutEmailsNestedInput = {
-    create?: XOR<FriendCreateWithoutEmailsInput, FriendUncheckedCreateWithoutEmailsInput>
-    connectOrCreate?: FriendCreateOrConnectWithoutEmailsInput
-    upsert?: FriendUpsertWithoutEmailsInput
-    connect?: FriendWhereUniqueInput
-    update?: XOR<XOR<FriendUpdateToOneWithWhereWithoutEmailsInput, FriendUpdateWithoutEmailsInput>, FriendUncheckedUpdateWithoutEmailsInput>
-  }
-
   export type UserCreateNestedOneWithoutFriendInput = {
     create?: XOR<UserCreateWithoutFriendInput, UserUncheckedCreateWithoutFriendInput>
     connectOrCreate?: UserCreateOrConnectWithoutFriendInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type EmailCreateNestedManyWithoutFriendInput = {
-    create?: XOR<EmailCreateWithoutFriendInput, EmailUncheckedCreateWithoutFriendInput> | EmailCreateWithoutFriendInput[] | EmailUncheckedCreateWithoutFriendInput[]
-    connectOrCreate?: EmailCreateOrConnectWithoutFriendInput | EmailCreateOrConnectWithoutFriendInput[]
-    createMany?: EmailCreateManyFriendInputEnvelope
-    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
-  }
-
-  export type EmailUncheckedCreateNestedManyWithoutFriendInput = {
-    create?: XOR<EmailCreateWithoutFriendInput, EmailUncheckedCreateWithoutFriendInput> | EmailCreateWithoutFriendInput[] | EmailUncheckedCreateWithoutFriendInput[]
-    connectOrCreate?: EmailCreateOrConnectWithoutFriendInput | EmailCreateOrConnectWithoutFriendInput[]
-    createMany?: EmailCreateManyFriendInputEnvelope
-    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutFriendNestedInput = {
@@ -5471,34 +5389,6 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutFriendInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFriendInput, UserUpdateWithoutFriendInput>, UserUncheckedUpdateWithoutFriendInput>
-  }
-
-  export type EmailUpdateManyWithoutFriendNestedInput = {
-    create?: XOR<EmailCreateWithoutFriendInput, EmailUncheckedCreateWithoutFriendInput> | EmailCreateWithoutFriendInput[] | EmailUncheckedCreateWithoutFriendInput[]
-    connectOrCreate?: EmailCreateOrConnectWithoutFriendInput | EmailCreateOrConnectWithoutFriendInput[]
-    upsert?: EmailUpsertWithWhereUniqueWithoutFriendInput | EmailUpsertWithWhereUniqueWithoutFriendInput[]
-    createMany?: EmailCreateManyFriendInputEnvelope
-    set?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
-    disconnect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
-    delete?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
-    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
-    update?: EmailUpdateWithWhereUniqueWithoutFriendInput | EmailUpdateWithWhereUniqueWithoutFriendInput[]
-    updateMany?: EmailUpdateManyWithWhereWithoutFriendInput | EmailUpdateManyWithWhereWithoutFriendInput[]
-    deleteMany?: EmailScalarWhereInput | EmailScalarWhereInput[]
-  }
-
-  export type EmailUncheckedUpdateManyWithoutFriendNestedInput = {
-    create?: XOR<EmailCreateWithoutFriendInput, EmailUncheckedCreateWithoutFriendInput> | EmailCreateWithoutFriendInput[] | EmailUncheckedCreateWithoutFriendInput[]
-    connectOrCreate?: EmailCreateOrConnectWithoutFriendInput | EmailCreateOrConnectWithoutFriendInput[]
-    upsert?: EmailUpsertWithWhereUniqueWithoutFriendInput | EmailUpsertWithWhereUniqueWithoutFriendInput[]
-    createMany?: EmailCreateManyFriendInputEnvelope
-    set?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
-    disconnect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
-    delete?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
-    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
-    update?: EmailUpdateWithWhereUniqueWithoutFriendInput | EmailUpdateWithWhereUniqueWithoutFriendInput[]
-    updateMany?: EmailUpdateManyWithWhereWithoutFriendInput | EmailUpdateManyWithWhereWithoutFriendInput[]
-    deleteMany?: EmailScalarWhereInput | EmailScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -5652,6 +5542,8 @@ export namespace Prisma {
     id?: string
     gmailMessageId: string
     subject?: string | null
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -5659,14 +5551,14 @@ export namespace Prisma {
     isNotified?: boolean
     customLabel?: string | null
     createdAt?: Date | string
-    friend: FriendCreateNestedOneWithoutEmailsInput
   }
 
   export type EmailUncheckedCreateWithoutUserInput = {
     id?: string
     gmailMessageId: string
     subject?: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -5687,20 +5579,18 @@ export namespace Prisma {
 
   export type FriendCreateWithoutUserInput = {
     id?: string
-    sender: string
+    emailAddress: string
     name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
-    emails?: EmailCreateNestedManyWithoutFriendInput
   }
 
   export type FriendUncheckedCreateWithoutUserInput = {
     id?: string
-    sender: string
+    emailAddress: string
     name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
-    emails?: EmailUncheckedCreateNestedManyWithoutFriendInput
   }
 
   export type FriendCreateOrConnectWithoutUserInput = {
@@ -5736,7 +5626,8 @@ export namespace Prisma {
     userId?: StringFilter<"Email"> | string
     gmailMessageId?: StringFilter<"Email"> | string
     subject?: StringNullableFilter<"Email"> | string | null
-    sender?: StringFilter<"Email"> | string
+    senderAddress?: StringFilter<"Email"> | string
+    receiverAddress?: StringFilter<"Email"> | string
     content?: StringFilter<"Email"> | string
     snippet?: StringNullableFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableFilter<"Email"> | Date | string | null
@@ -5768,7 +5659,7 @@ export namespace Prisma {
     NOT?: FriendScalarWhereInput | FriendScalarWhereInput[]
     id?: StringFilter<"Friend"> | string
     userId?: StringFilter<"Friend"> | string
-    sender?: StringFilter<"Friend"> | string
+    emailAddress?: StringFilter<"Friend"> | string
     name?: StringNullableFilter<"Friend"> | string | null
     createdAt?: DateTimeFilter<"Friend"> | Date | string
     customLabel?: StringNullableFilter<"Friend"> | string | null
@@ -5797,29 +5688,6 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutEmailsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutEmailsInput, UserUncheckedCreateWithoutEmailsInput>
-  }
-
-  export type FriendCreateWithoutEmailsInput = {
-    id?: string
-    sender: string
-    name?: string | null
-    createdAt?: Date | string
-    customLabel?: string | null
-    user: UserCreateNestedOneWithoutFriendInput
-  }
-
-  export type FriendUncheckedCreateWithoutEmailsInput = {
-    id?: string
-    userId: string
-    sender: string
-    name?: string | null
-    createdAt?: Date | string
-    customLabel?: string | null
-  }
-
-  export type FriendCreateOrConnectWithoutEmailsInput = {
-    where: FriendWhereUniqueInput
-    create: XOR<FriendCreateWithoutEmailsInput, FriendUncheckedCreateWithoutEmailsInput>
   }
 
   export type UserUpsertWithoutEmailsInput = {
@@ -5853,35 +5721,6 @@ export namespace Prisma {
     friend?: FriendUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type FriendUpsertWithoutEmailsInput = {
-    update: XOR<FriendUpdateWithoutEmailsInput, FriendUncheckedUpdateWithoutEmailsInput>
-    create: XOR<FriendCreateWithoutEmailsInput, FriendUncheckedCreateWithoutEmailsInput>
-    where?: FriendWhereInput
-  }
-
-  export type FriendUpdateToOneWithWhereWithoutEmailsInput = {
-    where?: FriendWhereInput
-    data: XOR<FriendUpdateWithoutEmailsInput, FriendUncheckedUpdateWithoutEmailsInput>
-  }
-
-  export type FriendUpdateWithoutEmailsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    customLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    user?: UserUpdateOneRequiredWithoutFriendNestedInput
-  }
-
-  export type FriendUncheckedUpdateWithoutEmailsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    customLabel?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type UserCreateWithoutFriendInput = {
     id?: string
     email: string
@@ -5905,42 +5744,6 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutFriendInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutFriendInput, UserUncheckedCreateWithoutFriendInput>
-  }
-
-  export type EmailCreateWithoutFriendInput = {
-    id?: string
-    gmailMessageId: string
-    subject?: string | null
-    content: string
-    snippet?: string | null
-    receivedAt?: Date | string | null
-    isRead?: boolean
-    isNotified?: boolean
-    customLabel?: string | null
-    createdAt?: Date | string
-    user: UserCreateNestedOneWithoutEmailsInput
-  }
-
-  export type EmailUncheckedCreateWithoutFriendInput = {
-    id?: string
-    gmailMessageId: string
-    subject?: string | null
-    content: string
-    snippet?: string | null
-    receivedAt?: Date | string | null
-    isRead?: boolean
-    isNotified?: boolean
-    customLabel?: string | null
-    createdAt?: Date | string
-  }
-
-  export type EmailCreateOrConnectWithoutFriendInput = {
-    where: EmailWhereUniqueInput
-    create: XOR<EmailCreateWithoutFriendInput, EmailUncheckedCreateWithoutFriendInput>
-  }
-
-  export type EmailCreateManyFriendInputEnvelope = {
-    data: EmailCreateManyFriendInput | EmailCreateManyFriendInput[]
   }
 
   export type UserUpsertWithoutFriendInput = {
@@ -5974,27 +5777,12 @@ export namespace Prisma {
     emails?: EmailUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type EmailUpsertWithWhereUniqueWithoutFriendInput = {
-    where: EmailWhereUniqueInput
-    update: XOR<EmailUpdateWithoutFriendInput, EmailUncheckedUpdateWithoutFriendInput>
-    create: XOR<EmailCreateWithoutFriendInput, EmailUncheckedCreateWithoutFriendInput>
-  }
-
-  export type EmailUpdateWithWhereUniqueWithoutFriendInput = {
-    where: EmailWhereUniqueInput
-    data: XOR<EmailUpdateWithoutFriendInput, EmailUncheckedUpdateWithoutFriendInput>
-  }
-
-  export type EmailUpdateManyWithWhereWithoutFriendInput = {
-    where: EmailScalarWhereInput
-    data: XOR<EmailUpdateManyMutationInput, EmailUncheckedUpdateManyWithoutFriendInput>
-  }
-
   export type EmailCreateManyUserInput = {
     id?: string
     gmailMessageId: string
     subject?: string | null
-    sender: string
+    senderAddress: string
+    receiverAddress: string
     content: string
     snippet?: string | null
     receivedAt?: Date | string | null
@@ -6006,7 +5794,7 @@ export namespace Prisma {
 
   export type FriendCreateManyUserInput = {
     id?: string
-    sender: string
+    emailAddress: string
     name?: string | null
     createdAt?: Date | string
     customLabel?: string | null
@@ -6016,6 +5804,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6023,14 +5813,14 @@ export namespace Prisma {
     isNotified?: BoolFieldUpdateOperationsInput | boolean
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    friend?: FriendUpdateOneRequiredWithoutEmailsNestedInput
   }
 
   export type EmailUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
-    sender?: StringFieldUpdateOperationsInput | string
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6044,7 +5834,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     gmailMessageId?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
-    sender?: StringFieldUpdateOperationsInput | string
+    senderAddress?: StringFieldUpdateOperationsInput | string
+    receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6056,81 +5847,26 @@ export namespace Prisma {
 
   export type FriendUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    emailAddress?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    emails?: EmailUpdateManyWithoutFriendNestedInput
   }
 
   export type FriendUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    emailAddress?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    emails?: EmailUncheckedUpdateManyWithoutFriendNestedInput
   }
 
   export type FriendUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    sender?: StringFieldUpdateOperationsInput | string
+    emailAddress?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customLabel?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type EmailCreateManyFriendInput = {
-    id?: string
-    gmailMessageId: string
-    subject?: string | null
-    content: string
-    snippet?: string | null
-    receivedAt?: Date | string | null
-    isRead?: boolean
-    isNotified?: boolean
-    customLabel?: string | null
-    createdAt?: Date | string
-  }
-
-  export type EmailUpdateWithoutFriendInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    gmailMessageId?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: StringFieldUpdateOperationsInput | string
-    snippet?: NullableStringFieldUpdateOperationsInput | string | null
-    receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
-    isNotified?: BoolFieldUpdateOperationsInput | boolean
-    customLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutEmailsNestedInput
-  }
-
-  export type EmailUncheckedUpdateWithoutFriendInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    gmailMessageId?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: StringFieldUpdateOperationsInput | string
-    snippet?: NullableStringFieldUpdateOperationsInput | string | null
-    receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
-    isNotified?: BoolFieldUpdateOperationsInput | boolean
-    customLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type EmailUncheckedUpdateManyWithoutFriendInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    gmailMessageId?: StringFieldUpdateOperationsInput | string
-    subject?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: StringFieldUpdateOperationsInput | string
-    snippet?: NullableStringFieldUpdateOperationsInput | string | null
-    receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    isRead?: BoolFieldUpdateOperationsInput | boolean
-    isNotified?: BoolFieldUpdateOperationsInput | boolean
-    customLabel?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

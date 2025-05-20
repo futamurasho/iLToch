@@ -8,7 +8,8 @@ class Email(BaseModel):
     userId: str
     gmailMessageId: str
     subject: Optional[str]
-    sender: str  
+    senderAddress: str  
+    receiverAddress:str
     content: str
     snippet: Optional[str]
     receivedAt: Optional[datetime]
