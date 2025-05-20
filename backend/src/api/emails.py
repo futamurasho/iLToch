@@ -99,11 +99,8 @@ def get_emails(req: EmailFetchRequest):
                     pass  # 既に登録済みなら無視
                 else:
                     raise e
-
-        return {"emails": fetched_emails, "friends": friend_list}
-    else:
-        #メールをDBから取得(ユーザが送信したメール、受信したメール全て)
-        # メールアドレスからメールを直接取得
-        emails = get_emails_by_email(user_email)
-        friend = get_friend_from_db()
-        return {"emails": emails, "friends": friend}
+    #メールをDBから取得(ユーザが送信したメール、受信したメール全て)
+    # メールアドレスからメールを直接取得
+    emails = get_emails_by_email(user_email)
+    friend = get_friend_from_db()
+    return {"emails": emails, "friends": friend}
