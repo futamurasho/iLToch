@@ -1,7 +1,7 @@
 "use client";
-import FriendSearch from "@/components/FriendSearch"; // ← 追加したやつ
+// import FriendSearch from "@/components/FriendSearch"; // ← 追加したやつ
 import { useEffect, useState } from "react";
-
+import GenericSearch from "@/components/GenericSearch"; // ← 新しく追加
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -33,8 +33,9 @@ const UserList: UserListType[] = [
 
 
 export default function ChatScreen() {
-  const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList); // ← これを追加
+  // const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList); // ← これを追加
   const [emails, setEmails] = useState<EmailType[]>([]);
+  const [filteredEmails, setFilteredEmails] = useState<EmailType[]>([]);
   const [selectUser, setSelectUser] = useState<FriendsType>({
     id: "",
     userId: "",
@@ -42,6 +43,7 @@ export default function ChatScreen() {
     createdAt: "",
   });
   const [friends, setFriends] = useState<FriendsType[]>([]);
+  const [filteredFriends, setFilteredFriends] = useState<FriendsType[]>([]);
 
   useEffect(() => {
     const fetchEmail = async () => {
@@ -50,6 +52,7 @@ export default function ChatScreen() {
       console.log(res.status);
       const data = await res.json();
       setEmails(data);
+      setFilteredEmails(data); // 検索対象の初期値
       console.log("fetchできました!");
     };
     fetchEmail();
@@ -60,6 +63,7 @@ export default function ChatScreen() {
       const res = await fetch("http://localhost:8080/api/friend");
       const data = await res.json();
       setFriends(data);
+      setFilteredFriends(data);
     };
     fetchFriend();
     console.log("friend頂き");
@@ -75,7 +79,13 @@ export default function ChatScreen() {
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
-              <FriendSearch userList={UserList} onFilter={setFilteredUsers} />
+              {/* <FriendSearch userList={UserList} onFilter={setFilteredUsers} /> */}
+              <GenericSearch
+                originalList={friends}
+                onFilter={setFilteredFriends}
+                searchKey="name"
+                placeholder="フレンドを検索"
+              />
               <ScrollArea className="h-full ">
                 {friends.map((user) => (
                   <div
@@ -98,7 +108,12 @@ export default function ChatScreen() {
               <CardTitle className="">〇〇からのメール</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
-     
+              <GenericSearch
+                originalList={emails}
+                onFilter={setFilteredEmails}
+                searchKey="content"
+                placeholder="メッセージを検索"
+              />
               <ScrollArea className="h-full">
                 {emails.map((email) => (
                   <MessageBubble key={email.id} text={email.content} />
