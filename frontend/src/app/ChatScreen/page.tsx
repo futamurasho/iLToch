@@ -2,6 +2,7 @@
 // import FriendSearch from "@/components/FriendSearch"; // ← 追加したやつ
 import { useEffect, useState } from "react";
 import GenericSearch from "@/components/GenericSearch"; // ← 新しく追加
+import { useSession } from "next-auth/react";
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,6 @@ const UserList: UserListType[] = [
   },
 ];
 
-
 export default function ChatScreen() {
   // const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList); // ← これを追加
   const [emails, setEmails] = useState<EmailType[]>([]);
@@ -39,14 +39,19 @@ export default function ChatScreen() {
   const [selectUser, setSelectUser] = useState<FriendsType>({
     id: "",
     userId: "",
-    sender: "",
+    emailAddress: "",
     createdAt: "",
   });
   const [friends, setFriends] = useState<FriendsType[]>([]);
   const [filteredFriends, setFilteredFriends] = useState<FriendsType[]>([]);
+  //status内にはloading,authenticated,unauthenticatedの状態を持つ、つまり、ログイン状態かそうでないか
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    const fetchEmail = async () => {
+    //ここで、DBにすでに登録されているユーザかどうかで処理が変わる
+    //登録済みの場合、DBからメールを取得して表示
+    //登録済みでない場合、GmailAPIの方から取得を行う。(その際に取得したメールはDBに保存(想定は10件程度))
+    const fetchEmails = async () => {
       console.log("fetchかいし");
       const res = await fetch("http://localhost:8080/api/email");
       console.log(res.status);
@@ -54,9 +59,33 @@ export default function ChatScreen() {
       setEmails(data);
       setFilteredEmails(data); // 検索対象の初期値
       console.log("fetchできました!");
+      console.log(session);
+      if (session?.accessToken) {
+        const res = await fetch("http://localhost:8080/api/get-emails", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            accessToken: session.accessToken,
+            refreshToken: session.refreshToken,
+            tokenExpiry: session.expires,
+            userId: session.user?.email, // DB保存時に使う想定
+          }),
+        });
+        const data = await res.json();
+        console.log("メール取得結果: ", data);
+        setEmails(data.emails);
+        if (data.friends) {
+          setFriends(data.friends); // ← ここで初期表示に friend が入る！
+          console.log("セットフレンドは呼ばれた")
+        }
+      }
     };
-    fetchEmail();
-  }, []);
+    if (status === "authenticated") {
+      fetchEmails();
+    }
+  }, [session, status]);
 
   useEffect(() => {
     const fetchFriend = async () => {
@@ -68,6 +97,14 @@ export default function ChatScreen() {
     fetchFriend();
     console.log("friend頂き");
   }, []);
+  // useEffect(() => {
+  //   const fetchFriend = async () => {
+  //     const res = await fetch("http://localhost:8080/api/friend");
+  //     const data = await res.json();
+  //     setFriends(data);
+  //   };
+  //   fetchFriend();
+  // }, []);
 
   return (
     <div className="flex flex-col h-screen">
@@ -87,17 +124,19 @@ export default function ChatScreen() {
                 placeholder="フレンドを検索"
               />
               <ScrollArea className="h-full ">
-                {friends.map((user) => (
+                {Array.isArray(friends)?
+                (friends.map((user) => (
                   <div
                     key={user.id}
                     className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg"
                     onClick={() => {
-                      setSelectUser(user)
+                      setSelectUser(user);
                     }}
                   >
-                    {user.name ? user.name : user.sender}
+                    {user.name ? user.name : user.emailAddress}
                   </div>
-                ))}
+                )))
+                : <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">Loading....</div>}
               </ScrollArea>
             </CardContent>
           </Card>
@@ -105,7 +144,9 @@ export default function ChatScreen() {
         <main className="flex-1 border-r p-4 overflow-hidden flex flex-col">
           <Card className="flex flex-col flex-1 overflow-hidden">
             <CardHeader className="border-b ">
-              <CardTitle className="">〇〇からのメール</CardTitle>
+              <CardTitle className="">
+                {selectUser.name || selectUser.emailAddress || "メール"}からのメール
+              </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
               <GenericSearch
@@ -115,9 +156,11 @@ export default function ChatScreen() {
                 placeholder="メッセージを検索"
               />
               <ScrollArea className="h-full">
-                {emails.map((email) => (
-                  <MessageBubble key={email.id} text={email.content} />
-                ))}
+                {emails
+                  .filter((email) => email.senderAddress === selectUser.emailAddress)
+                  .map((email) => (
+                    <MessageBubble key={email.id} text={email.content} sender={email.senderAddress} time={email.createdAt} read={email.isRead} />
+                  ))}
               </ScrollArea>
             </CardContent>
             <form

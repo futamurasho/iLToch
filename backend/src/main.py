@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from gmail_sender import send_email
+from gmail_controllers.gmail_sender import send_email
 from api import emails, friends
 import uvicorn
 
@@ -25,6 +25,7 @@ class EmailRequest(BaseModel):
     subject: str
     body: str
     accessToken: str
+    user: object
 
 #テスト
 @app.get("/")
@@ -34,7 +35,7 @@ def root():
 # メール送信エンドポイント
 @app.post("/send")
 def send(email: EmailRequest):
-    send_email(email.to, email.subject, email.body,email.accessToken)
+    send_email(email.to, email.subject, email.body, email.accessToken, email.user)
     return {"message": "メール送信完了"}
 
 #

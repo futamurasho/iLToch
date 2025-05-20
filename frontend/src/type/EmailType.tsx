@@ -3,7 +3,8 @@ export type EmailType = {
     userId: number;
     gmailMessageId: string;
     subject?: string;      // 件名はnull許容なので optional に
-    from?: string;         // 差出人も optional
+    senderAddress: string;        // 差出人
+    receiverAddress: string;        // 受取人
     content: string;
     snippet?: string;
     receivedAt?: string;   // DateTime はフロントだと string になることが多いです

@@ -131,7 +131,8 @@ exports.Prisma.EmailScalarFieldEnum = {
   userId: 'userId',
   gmailMessageId: 'gmailMessageId',
   subject: 'subject',
-  sender: 'sender',
+  senderAddress: 'senderAddress',
+  receiverAddress: 'receiverAddress',
   content: 'content',
   snippet: 'snippet',
   receivedAt: 'receivedAt',
@@ -144,7 +145,7 @@ exports.Prisma.EmailScalarFieldEnum = {
 exports.Prisma.FriendScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  sender: 'sender',
+  emailAddress: 'emailAddress',
   name: 'name',
   createdAt: 'createdAt',
   customLabel: 'customLabel'
