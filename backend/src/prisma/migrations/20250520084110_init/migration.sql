@@ -14,7 +14,8 @@ CREATE TABLE "emails" (
     "userId" TEXT NOT NULL,
     "gmailMessageId" TEXT NOT NULL,
     "subject" TEXT,
-    "sender" TEXT NOT NULL,
+    "senderAddress" TEXT NOT NULL,
+    "receiverAddress" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "snippet" TEXT,
     "receivedAt" DATETIME,
@@ -23,7 +24,7 @@ CREATE TABLE "emails" (
     "customLabel" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "emails_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "emails_sender_fkey" FOREIGN KEY ("sender") REFERENCES "friends" ("sender") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "emails_userId_senderAddress_fkey" FOREIGN KEY ("userId", "senderAddress") REFERENCES "friends" ("userId", "sender") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -44,4 +45,4 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "emails_gmailMessageId_key" ON "emails"("gmailMessageId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "friends_sender_key" ON "friends"("sender");
+CREATE UNIQUE INDEX "friends_userId_sender_key" ON "friends"("userId", "sender");

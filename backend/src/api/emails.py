@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List
 from models.email_model import Email
 from models.friend_model import Friend
-from db.database import get_emails_from_db, is_user_registered, post_email_to_db, post_friend_to_db,post_user_to_db,get_emails_by_email# DBからの取得関数
+from db.database import get_emails_from_db, is_user_registered, post_email_to_db, post_friend_to_db,post_user_to_db,get_emails_by_email, get_friend_from_db# DBからの取得関数
 from gmail_controllers.gmail_fetcher import get_gmail_service, fetch_message_list
 from datetime import datetime
 import uuid
@@ -58,7 +58,7 @@ def get_emails(req: EmailFetchRequest):
         service = get_gmail_service(req.accessToken)
         fetched_emails = fetch_message_list(service, user_id="me", query="is:unread", count=10)
         #取得したメールをDBに保存+取得したメールの送信主をfriendに登録
-
+        friend_list= []
         for email_data in fetched_emails:
             #frinedの名前、アドレス取得
             friend_name, friend_email = parse_sender((email_data.get("sender", "")))
@@ -90,17 +90,20 @@ def get_emails(req: EmailFetchRequest):
                 createdAt=datetime.now().isoformat(),
                 customLabel=None
             )
+            
             try:
                 post_friend_to_db(friend)
+                friend_list.append(friend)
             except HTTPException as e:
                 if e.status_code == 409:
                     pass  # 既に登録済みなら無視
                 else:
                     raise e
 
-        return {"emails": fetched_emails}
+        return {"emails": fetched_emails, "friends": friend_list}
     else:
         #メールをDBから取得(ユーザが送信したメール、受信したメール全て)
         # メールアドレスからメールを直接取得
         emails = get_emails_by_email(user_email)
-        return {"emails": emails}
+        friend = get_friend_from_db()
+        return {"emails": emails, "friends": friend}

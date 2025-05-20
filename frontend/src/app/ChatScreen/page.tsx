@@ -11,6 +11,7 @@ import MessageBubble from "@/components/MessageBubble";
 import { UserListType } from "@/type/UserListType";
 import { EmailType } from "@/type/EmailType";
 import { FriendsType } from "@/type/FriendsType";
+import { Divide } from "lucide-react";
 
 const UserList: UserListType[] = [
   {
@@ -67,6 +68,10 @@ export default function ChatScreen() {
         const data = await res.json();
         console.log("メール取得結果: ", data);
         setEmails(data.emails);
+        if (data.friends) {
+          setFriends(data.friends); // ← ここで初期表示に friend が入る！
+          console.log("セットフレンドは呼ばれた")
+        }
       }
     };
     if (status === "authenticated") {
@@ -74,14 +79,14 @@ export default function ChatScreen() {
     }
   }, [session, status]);
 
-  useEffect(() => {
-    const fetchFriend = async () => {
-      const res = await fetch("http://localhost:8080/api/friend");
-      const data = await res.json();
-      setFriends(data);
-    };
-    fetchFriend();
-  }, []);
+  // useEffect(() => {
+  //   const fetchFriend = async () => {
+  //     const res = await fetch("http://localhost:8080/api/friend");
+  //     const data = await res.json();
+  //     setFriends(data);
+  //   };
+  //   fetchFriend();
+  // }, []);
 
   return (
     <div className="flex flex-col h-screen">
@@ -95,7 +100,8 @@ export default function ChatScreen() {
             <CardContent className="flex-1 overflow-hidden">
               <FriendSearch userList={UserList} onFilter={setFilteredUsers} />
               <ScrollArea className="h-full ">
-                {friends.map((user) => (
+                {Array.isArray(friends)?
+                (friends.map((user) => (
                   <div
                     key={user.id}
                     className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg"
@@ -105,7 +111,8 @@ export default function ChatScreen() {
                   >
                     {user.name ? user.name : user.sender}
                   </div>
-                ))}
+                )))
+                : <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">Loading....</div>}
               </ScrollArea>
             </CardContent>
           </Card>
