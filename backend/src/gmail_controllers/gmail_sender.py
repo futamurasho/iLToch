@@ -5,6 +5,10 @@ import os
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 import json
+from db.database import send_emails_to_db
+from datetime import datetime
+from models.email_model import Email
+import uuid
 
 SCOPES = ['https://mail.google.com/']
 
@@ -25,7 +29,7 @@ def get_token():
 
     return creds
 
-def send_email(to, subject, body_text,access_token):
+def send_email(to, subject, body_text,access_token, user):
     # 1. アクセストークンから Credentials を直接作成
     creds = Credentials(token=access_token, scopes=SCOPES)
     # creds = get_token()
@@ -42,3 +46,23 @@ def send_email(to, subject, body_text,access_token):
 
     send_message = service.users().messages().send(userId="me", body=create_message).execute()
     print(f"Message sent. ID: {send_message['id']}")
+    gmail_message_id = send_message["id"]
+    now = datetime.now()
+    print("DEBUG==============")
+    print(user)
+    email = Email(
+        id=str(uuid.uuid4()),
+        userId="me",  #本当はsession user
+        senderAddress=user["email"], #本当はsession userのmailaddress
+        receiverAddress=to,  # GmailのFromアドレスを取得する場合は別途取得可能
+        content=body_text,
+        gmailMessageId=gmail_message_id,
+        receivedAt=now,
+        subject=subject,
+        snippet=body_text[:100],  # 冒頭部分
+        isRead=True,
+        isNotified=False,
+        createdAt=now,
+        customLabel="sent"
+    )
+    send_emails_to_db(email)

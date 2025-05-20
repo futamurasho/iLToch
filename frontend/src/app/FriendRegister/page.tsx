@@ -42,7 +42,7 @@ export default function FriendRegister() {
       },
       body: JSON.stringify({
         userId: "a", //ここはセッション情報を作ろう
-        sender: values.email,
+        emailAddress: values.email,
       }),
     });
     if (res.status === 409) {

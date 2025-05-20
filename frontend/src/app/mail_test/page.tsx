@@ -8,7 +8,7 @@ function App() {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const { data: session } = useSession(); // ← 追加
-
+  const user = session?.user
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const accessToken = session?.accessToken;
@@ -16,17 +16,17 @@ function App() {
       alert("ログインしていません！");
       return;
     } else {
-      console.log(JSON.stringify({ to, subject, body, accessToken }));
+      console.log(JSON.stringify({ to, subject, body, accessToken, user }));
     }
     await fetch("http://localhost:8080/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ to, subject, body, accessToken }),
+      body: JSON.stringify({ to, subject, body, accessToken, user }),
     });
 
-    console.log("送信！", { to, subject, body, accessToken });
+    console.log("送信！", { to, subject, body, accessToken, user});
   };
 
   return (

@@ -128,7 +128,7 @@ export default function ChatScreen() {
                 {emails
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
                   .map((email) => (
-                    <MessageBubble key={email.id} text={email.content} />
+                    <MessageBubble key={email.id} text={email.content} sender={email.senderAddress} time={email.createdAt} read={email.isRead} />
                   ))}
               </ScrollArea>
             </CardContent>
