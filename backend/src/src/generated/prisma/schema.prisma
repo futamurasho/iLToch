@@ -30,8 +30,8 @@ model Email {
   gmailMessageId  String    @unique // GmailメッセージID（ユニーク）
   subject         String? // メール件名
   senderAddress   String // 差出人（メールアドレスや名前）
-  receiverAddress String // 差出人（メールアドレスや名前）
-  content         String //メールの本文
+  receiverAddress String // 受取人（メールアドレスや名前）
+  content         String // メールの本文
   snippet         String? // メール本文の冒頭（プレビュー）
   receivedAt      DateTime? // メールの受信時刻
   isRead          Boolean   @default(false) // 既読状態
@@ -39,9 +39,9 @@ model Email {
   customLabel     String? // ユーザー独自ラベル
   createdAt       DateTime  @default(now()) // 登録日時
 
-  user User @relation(fields: [userId], references: [id]) // 外部キーリレーション
+  user User @relation(fields: [userId], references: [id])
 
-  @@map("emails") // テーブル名を明示（任意）
+  @@map("emails")
 }
 
 model Friend {

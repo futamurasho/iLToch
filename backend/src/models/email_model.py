@@ -5,8 +5,10 @@ from datetime import datetime
 
 class EmailCreate(BaseModel):
     userId: str
-    senderAddress: str
-    receiverAddress: str
+    gmailMessageId: str
+    subject: Optional[str]
+    senderAddress: str  
+    receiverAddress:str
     content: str
     gmailMessageId: str
     receivedAt: Optional[datetime]
