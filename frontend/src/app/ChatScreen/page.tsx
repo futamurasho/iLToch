@@ -11,7 +11,6 @@ import MessageBubble from "@/components/MessageBubble";
 import { UserListType } from "@/type/UserListType";
 import { EmailType } from "@/type/EmailType";
 import { FriendsType } from "@/type/FriendsType";
-import { Divide } from "lucide-react";
 
 const UserList: UserListType[] = [
   {
@@ -38,7 +37,7 @@ export default function ChatScreen() {
   const [selectUser, setSelectUser] = useState<FriendsType>({
     id: "",
     userId: "",
-    sender: "",
+    emailAddress: "",
     createdAt: "",
   });
   const [friends, setFriends] = useState<FriendsType[]>([]);
@@ -109,7 +108,7 @@ export default function ChatScreen() {
                       setSelectUser(user);
                     }}
                   >
-                    {user.name ? user.name : user.sender}
+                    {user.name ? user.name : user.emailAddress}
                   </div>
                 )))
                 : <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">Loading....</div>}
@@ -121,13 +120,13 @@ export default function ChatScreen() {
           <Card className="flex flex-col flex-1 overflow-hidden">
             <CardHeader className="border-b ">
               <CardTitle className="">
-                {selectUser.name || selectUser.sender || "メール"}からのメール
+                {selectUser.name || selectUser.emailAddress || "メール"}からのメール
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
               <ScrollArea className="h-full">
                 {emails
-                  .filter((email) => email.senderAddress === selectUser.sender)
+                  .filter((email) => email.senderAddress === selectUser.emailAddress)
                   .map((email) => (
                     <MessageBubble key={email.id} text={email.content} />
                   ))}

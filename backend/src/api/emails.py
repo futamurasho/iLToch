@@ -85,7 +85,7 @@ def get_emails(req: EmailFetchRequest):
             friend = Friend(
                 id=str(uuid.uuid4()), # 乱数
                 userId=userid_created,#useridと同一
-                sender=email_obj.senderAddress,
+                emailAddress=email_obj.senderAddress,
                 name=friend_name,
                 createdAt=datetime.now().isoformat(),
                 customLabel=None

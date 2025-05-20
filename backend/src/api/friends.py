@@ -14,7 +14,7 @@ def register_friend(friend_create: FriendCreate):
     new_friend = Friend(
         id=str(uuid.uuid4()),
         userId=friend_create.userId,
-        sender=friend_create.sender,
+        emailAddress=friend_create.emailAddress,
         name=friend_create.name,
         createdAt=datetime.now(),
         customLabel=friend_create.customLabel,
