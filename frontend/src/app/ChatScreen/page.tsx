@@ -1,6 +1,6 @@
 "use client";
 import FriendSearch from "@/components/FriendSearch"; // ← 追加したやつ
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -43,6 +43,7 @@ export default function ChatScreen() {
   const [friends, setFriends] = useState<FriendsType[]>([]);
   //status内にはloading,authenticated,unauthenticatedの状態を持つ、つまり、ログイン状態かそうでないか
   const { data: session, status } = useSession();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     //ここで、DBにすでに登録されているユーザかどうかで処理が変わる
@@ -124,11 +125,11 @@ export default function ChatScreen() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
-              <ScrollArea className="h-full">
+              <ScrollArea ref={scrollAreaRef} className="h-full">
                 {emails
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
                   .map((email) => (
-                    <MessageBubble key={email.id} text={email.content} sender={email.senderAddress} time={email.createdAt} read={email.isRead} />
+                    <MessageBubble scrollAreaRef={scrollAreaRef} key={email.id} text={email.content} sender={email.senderAddress} time={email.createdAt} read={email.isRead} snippet={email.snippet} subject={email.subject}/>
                   ))}
               </ScrollArea>
             </CardContent>
