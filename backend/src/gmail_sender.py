@@ -29,7 +29,7 @@ def get_token():
 
     return creds
 
-def send_email(to, subject, body_text,access_token):
+def send_email(to, subject, body_text,access_token, user):
     # 1. アクセストークンから Credentials を直接作成
     creds = Credentials(token=access_token, scopes=SCOPES)
     # creds = get_token()
@@ -48,10 +48,12 @@ def send_email(to, subject, body_text,access_token):
     print(f"Message sent. ID: {send_message['id']}")
     gmail_message_id = send_message["id"]
     now = datetime.now()
+    print("DEBUG==============")
+    print(user)
     email = Email(
         id=str(uuid.uuid4()),
-        userId="a",  #本当はsession user
-        senderAddress="me", #本当はsession userのmailaddress
+        userId="me",  #本当はsession user
+        senderAddress=user["email"], #本当はsession userのmailaddress
         receiverAddress=to,  # GmailのFromアドレスを取得する場合は別途取得可能
         content=body_text,
         gmailMessageId=gmail_message_id,
