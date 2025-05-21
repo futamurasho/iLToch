@@ -13,6 +13,7 @@ router = APIRouter()
 
 #型アクセストークンとuserID(Gmailアドレス)
 class EmailFetchRequest(BaseModel):
+    email: str
     accessToken: str
     refreshToken: str
     tokenExpiry: str
@@ -36,7 +37,7 @@ def parse_sender(raw_sender: str) -> Tuple[str, str]:
 
 @router.post("/get-emails")
 def get_emails(req: EmailFetchRequest):
-    user_email=req.userId
+    user_email=req.email
     #有効期限をdatetimeに
     expiry_dt = datetime.fromisoformat(req.tokenExpiry.replace("Z", "+00:00"))
     # Gmail APIからメールを10件取得する処理
@@ -48,7 +49,7 @@ def get_emails(req: EmailFetchRequest):
         userid_created=str(uuid.uuid4())
         #ユーザDBに情報を登録
         post_user_to_db(
-            id=userid_created,
+            id=req.userId,
             email=user_email,
             accessToken=req.accessToken,
             refreshToken=req.refreshToken,
@@ -64,7 +65,7 @@ def get_emails(req: EmailFetchRequest):
             friend_name, friend_email = parse_sender((email_data.get("sender", "")))
             email_obj = Email(
                 id=str(uuid.uuid4()),#乱数
-                userId=userid_created,
+                userId=req.userId,
                 gmailMessageId=email_data["id"],
                 subject=email_data.get("subject", ""),
                 senderAddress=friend_email,
@@ -84,7 +85,7 @@ def get_emails(req: EmailFetchRequest):
             # 3. 差出人をFriendとして登録
             friend = Friend(
                 id=str(uuid.uuid4()), # 乱数
-                userId=userid_created,#useridと同一
+                userId=req.userId,#useridと同一
                 emailAddress=email_obj.senderAddress,
                 name=friend_name,
                 createdAt=datetime.now().isoformat(),
