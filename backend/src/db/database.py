@@ -1,7 +1,7 @@
 import sqlite3
 from sqlite3 import IntegrityError
 from models.email_model import Email
-from models.friend_model import Friend
+from models.friend_model import Friend,FriendUpdate
 from typing import List
 import os
 from fastapi import HTTPException
@@ -223,3 +223,22 @@ def get_friend_from_db() -> List[Friend]:
         )
     
     return friends
+
+def patch_friend_to_name(friend_id: str , req: FriendUpdate):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    print(friend_id)
+    print(req.name)
+    try:
+        cursor.execute(
+            "UPDATE friends SET name = ? WHERE id = ?",
+            (req.name, friend_id)
+        )
+        conn.commit()
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Friend not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
+    finally:
+        conn.close()
+    return {"message": "Friend name updated successfully"}

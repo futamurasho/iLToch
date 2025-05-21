@@ -62,7 +62,9 @@ export default function ChatScreen() {
             accessToken: session.accessToken,
             refreshToken: session.refreshToken,
             tokenExpiry: session.expires,
-            userId: session.user?.email, // DB保存時に使う想定
+            email: session.user?.email, // DB保存時に使う想定
+            userId: session.user?.id
+
           }),
         });
         const data = await res.json();
