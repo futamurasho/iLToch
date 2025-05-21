@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from models.friend_model import Friend, FriendCreate
-from db.database import post_friend_to_db, get_friend_from_db
+from models.friend_model import Friend, FriendCreate, FriendUpdate
+from db.database import post_friend_to_db, get_friend_from_db, patch_friend_to_name
 from datetime import datetime
 import uuid
 from typing import List
@@ -26,3 +26,7 @@ def register_friend(friend_create: FriendCreate):
 @router.get("/friend", response_model=List[Friend])
 def get_frined():
     return get_friend_from_db()
+
+@router.patch("/friend/{friend_id}")
+def update_friend(friend_id: str, req: FriendUpdate):
+    return patch_friend_to_name(friend_id, req)

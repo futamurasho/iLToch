@@ -1,7 +1,7 @@
 "use client";
 // import FriendSearch from "@/components/FriendSearch";
-import { useEffect, useState } from "react";
 import GenericSearch from "@/components/GenericSearch";
+import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -46,6 +46,7 @@ export default function ChatScreen() {
   const [filteredFriends, setFilteredFriends] = useState<FriendsType[]>([]);
   //status内にはloading,authenticated,unauthenticatedの状態を持つ、つまり、ログイン状態かそうでないか
   const { data: session, status } = useSession();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     //ここで、DBにすでに登録されているユーザかどうかで処理が変わる
@@ -69,7 +70,9 @@ export default function ChatScreen() {
             accessToken: session.accessToken,
             refreshToken: session.refreshToken,
             tokenExpiry: session.expires,
-            userId: session.user?.email, // DB保存時に使う想定
+            email: session.user?.email, // DB保存時に使う想定
+            userId: session.user?.id
+
           }),
         });
         const data = await res.json();
@@ -159,9 +162,10 @@ export default function ChatScreen() {
               />
               <ScrollArea className="h-full">
                 {filteredEmails
+
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
                   .map((email) => (
-                    <MessageBubble key={email.id} text={email.content} sender={email.senderAddress} time={email.createdAt} read={email.isRead} />
+                    <MessageBubble scrollAreaRef={scrollAreaRef} key={email.id} text={email.content} sender={email.senderAddress} time={email.createdAt} read={email.isRead} snippet={email.snippet} subject={email.subject}/>
                   ))}
               </ScrollArea>
             </CardContent>

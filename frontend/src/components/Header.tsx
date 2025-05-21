@@ -1,21 +1,25 @@
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 
 export default function Header () {
+  const router = useRouter();
+  const {data: session} = useSession()
     return (
         <header className="bg-primary text-primary-foreground p-4 shadow-md flex justify-between h-18">
         <h1
           className="text-2xl font-bold cursor-pointer">
-          Chat App
+          iLToch
         </h1>
   
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="rounded-full p-0 w-10 h-10">
               <Avatar>
-                <AvatarImage  src="/favicon.ico"/>{/*ユーザごとの画像を登録してもらって表示したいね．とりあえずはnextのロゴ */}
+                <AvatarImage  src={session?.user?.image}/>{/*ユーザごとの画像を登録してもらって表示したいね．とりあえずはnextのロゴ */}
                 <AvatarFallback>
                     {/* 画像が登録されていない時に使用する．user名のイニシャルとか */}
                 </AvatarFallback>
@@ -23,16 +27,20 @@ export default function Header () {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem >
-                {/* クリックされたらプロフィール画面に遷移する処理を記述 */}
+            <DropdownMenuItem onClick={() => {
+              router.push("/Profile")
+            }}>
+               
               プロフィール
             </DropdownMenuItem>
-            <DropdownMenuItem >
-                {/* クリックされたらチャット画面に遷移する処理を記述 */}
+            <DropdownMenuItem onClick={() => {
+              router.push("/ChatScreen")
+            }}>
               チャット
             </DropdownMenuItem>
-            <DropdownMenuItem>
-                {/* クリックされたらフレンド登録画面に遷移する処理を記述 */}
+            <DropdownMenuItem onClick={() => {
+              router.push("/FriendRegister")
+            }}>
               <span>フレンド登録</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
