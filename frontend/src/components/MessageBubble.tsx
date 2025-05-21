@@ -1,6 +1,6 @@
 
 import { useSession } from "next-auth/react";
-import { RefObject, useRef, useEffect, useState } from "react"
+import { RefObject, useEffect, useState } from "react"
 import { cn } from "@/lib/utils";
 import { toast, type Toast } from "sonner";
 
@@ -76,7 +76,6 @@ export default function MessageBubble({
                   zIndex: 9999,
                 }}
                 className="bg-white  rounded-lg shadow-lg text-black  flex flex-col"
-                onClick={() => toast.dismiss(t.id)}
               >
                 <div className="p-6 overflow-y-auto">
                 <p className="font-bold mb-2">件名: {subject}</p>
