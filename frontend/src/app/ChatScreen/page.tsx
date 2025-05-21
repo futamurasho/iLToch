@@ -1,7 +1,7 @@
 "use client";
-// import FriendSearch from "@/components/FriendSearch"; // ← 追加したやつ
+// import FriendSearch from "@/components/FriendSearch";
 import { useEffect, useState } from "react";
-import GenericSearch from "@/components/GenericSearch"; // ← 新しく追加
+import GenericSearch from "@/components/GenericSearch";
 import { useSession } from "next-auth/react";
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -33,7 +33,7 @@ const UserList: UserListType[] = [
 ];
 
 export default function ChatScreen() {
-  // const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList); // ← これを追加
+  const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList);
   const [emails, setEmails] = useState<EmailType[]>([]);
   const [filteredEmails, setFilteredEmails] = useState<EmailType[]>([]);
   const [selectUser, setSelectUser] = useState<FriendsType>({
@@ -53,11 +53,10 @@ export default function ChatScreen() {
     //登録済みでない場合、GmailAPIの方から取得を行う。(その際に取得したメールはDBに保存(想定は10件程度))
     const fetchEmails = async () => {
       console.log("fetchかいし");
-      const res = await fetch("http://localhost:8080/api/email");
-      console.log(res.status);
-      const data = await res.json();
-      setEmails(data);
-      setFilteredEmails(data); // 検索対象の初期値
+      // const res = await fetch("http://localhost:8080/api/email");
+      // console.log(res.status);
+      // const data = await res.json();
+      
       console.log("fetchできました!");
       console.log(session);
       if (session?.accessToken) {
@@ -76,6 +75,7 @@ export default function ChatScreen() {
         const data = await res.json();
         console.log("メール取得結果: ", data);
         setEmails(data.emails);
+      setFilteredEmails(data.emails); // 検索対象の初期値
         if (data.friends) {
           setFriends(data.friends); // ← ここで初期表示に friend が入る！
           console.log("セットフレンドは呼ばれた")
@@ -116,7 +116,7 @@ export default function ChatScreen() {
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
-              {/* <FriendSearch userList={UserList} onFilter={setFilteredUsers} /> */}
+              {/* <FriendSearch userList={UserList} onFilter={setFilteredUsers} />  */}
               <GenericSearch
                 originalList={friends}
                 onFilter={setFilteredFriends}
@@ -124,8 +124,10 @@ export default function ChatScreen() {
                 placeholder="フレンドを検索"
               />
               <ScrollArea className="h-full ">
-                {Array.isArray(friends)?
-                (friends.map((user) => (
+                {/* {Array.isArray(friends)?
+                (friends.map((user) => ( */}
+                {Array.isArray(filteredFriends)?
+                (filteredFriends.map((user) => (
                   <div
                     key={user.id}
                     className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg"
@@ -156,7 +158,7 @@ export default function ChatScreen() {
                 placeholder="メッセージを検索"
               />
               <ScrollArea className="h-full">
-                {emails
+                {filteredEmails
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
                   .map((email) => (
                     <MessageBubble key={email.id} text={email.content} sender={email.senderAddress} time={email.createdAt} read={email.isRead} />
