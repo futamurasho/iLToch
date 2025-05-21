@@ -76,6 +76,9 @@ export default function ChatScreen() {
         }
       }
     };
+    if(status === "loading") {
+      
+    }
     if (status === "authenticated") {
       fetchEmails();
     }
@@ -102,7 +105,7 @@ export default function ChatScreen() {
             <CardContent className="flex-1 overflow-hidden">
               <FriendSearch userList={UserList} onFilter={setFilteredUsers} />
               <ScrollArea className="h-full ">
-                {Array.isArray(friends)?
+                {Array.isArray(friends) && friends.length > 0?
                 (friends.map((user) => (
                   <div
                     key={user.id}
