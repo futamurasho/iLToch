@@ -21,3 +21,6 @@ class Email(EmailCreate):
     isRead: bool
     isNotified: bool
     createdAt: datetime
+
+class EmailUpdate(BaseModel):
+    isRead: bool

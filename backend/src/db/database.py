@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import IntegrityError
-from models.email_model import Email
+from models.email_model import Email, EmailUpdate
 from models.friend_model import Friend,FriendUpdate
 from typing import List
 import os
@@ -242,3 +242,20 @@ def patch_friend_to_name(friend_id: str , req: FriendUpdate):
     finally:
         conn.close()
     return {"message": "Friend name updated successfully"}
+
+def patch_email_to_isread(email_id: str ):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "UPDATE emails SET isRead = true WHERE id = ?",
+            (email_id,)
+        )
+        conn.commit()
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Email not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
+    finally:
+        conn.close()
+    return {"message": "Email isRead updated successfully"}
