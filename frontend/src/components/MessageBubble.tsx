@@ -30,6 +30,18 @@ export default function MessageBubble({
     return `${hours}:${minutes}`;
   };
 
+  const patchReadHandler = async(newEmail: EmailType) => {
+      console.log("patch開始しました")
+      const res = await fetch(`http://localhost:8080/api/emails/${newEmail.id}`,{
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      const data = await res.json()
+      console.log(data)
+      readHandler(newEmail);
+  }
   return (
     <div
       className={cn(
@@ -85,7 +97,7 @@ export default function MessageBubble({
                       toast.dismiss(t.id);
                       if (email.senderAddress != session?.user?.email) {
                         const newEmail = { ...email, isRead: true };
-                        readHandler(newEmail);
+                        patchReadHandler(newEmail)
                       }
                     }}
                   >
