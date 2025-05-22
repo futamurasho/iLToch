@@ -89,24 +89,36 @@ export default function ChatScreen() {
     }
   }, [session, status]);
 
-  useEffect(() => {
-    const fetchFriend = async () => {
-      const res = await fetch("http://localhost:8080/api/friend");
-      const data = await res.json();
-      setFriends(data);
-      setFilteredFriends(data);
-    };
-    fetchFriend();
-    console.log("friend頂き");
-  }, []);
   // useEffect(() => {
   //   const fetchFriend = async () => {
   //     const res = await fetch("http://localhost:8080/api/friend");
   //     const data = await res.json();
   //     setFriends(data);
+  //     setFilteredFriends(data);
   //   };
   //   fetchFriend();
+  //   console.log("friend頂き");
   // }, []);
+useEffect(() => {
+  const fetchFriend = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/api/friend");
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      setFriends(data);
+      setFilteredFriends(data);
+    } catch (error) {
+      console.error("友達リストの取得に失敗しました", error);
+      setFriends([]);
+      setFilteredFriends([]);
+    }
+  };
+  fetchFriend();
+  console.log("friend頂き");
+}, []);
+
 
   const readHandler = (newEmail: EmailType) => {
     const newEmails = emails.map((email) =>
