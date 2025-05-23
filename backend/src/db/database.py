@@ -199,12 +199,14 @@ def post_friend_to_db(friend: Friend) -> None:
         print("post_friend_to_db clear")
 
 #フレンド取得
-def get_friend_from_db() -> List[Friend]:
+def get_friend_from_db(userId:str) -> List[Friend]:
+    print(userId)
 
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT id, userId, emailAddress, name, createdAt, customLabel FROM friends"
+        "SELECT id, userId, emailAddress, name, createdAt, customLabel FROM friends  WHERE userId = ?",
+        (userId,)
     )
     rows = cursor.fetchall()
     conn.close()
