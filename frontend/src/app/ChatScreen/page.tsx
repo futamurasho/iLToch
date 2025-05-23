@@ -84,6 +84,9 @@ export default function ChatScreen() {
         }
       }
     };
+    if(status === "loading") {
+      
+    }
     if (status === "authenticated") {
       fetchEmails();
     }

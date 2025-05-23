@@ -24,8 +24,8 @@ def register_friend(friend_create: FriendCreate):
     return {"message": "Friend registerd successfully"}
 
 @router.get("/friend", response_model=List[Friend])
-def get_frined():
-    return get_friend_from_db()
+def get_frined(userId: str):
+    return get_friend_from_db(userId)
 
 @router.patch("/friend/{friend_id}")
 def update_friend(friend_id: str, req: FriendUpdate):

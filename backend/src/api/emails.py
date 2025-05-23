@@ -45,6 +45,7 @@ def get_emails(req: EmailFetchRequest):
     is_registered=is_user_registered(user_email)
     #DBに登録していなかった場合
     if not is_registered:
+        print("入った")
         #SQLITE経由だとprismaに挿入する際には、乱数を挿入しておく必要がある(INSERT文でuseridを抜くことができない)
         userid_created=str(uuid.uuid4())
         #ユーザDBに情報を登録
@@ -103,7 +104,8 @@ def get_emails(req: EmailFetchRequest):
     #メールをDBから取得(ユーザが送信したメール、受信したメール全て)
     # メールアドレスからメールを直接取得
     emails = get_emails_by_email(user_email)
-    friend = get_friend_from_db()
+    friend = get_friend_from_db(req.userId)
+    print(friend)
     return {"emails": emails, "friends": friend}
 @router.patch("/emails/{email_id}")
 def patch_emails(email_id: str):
