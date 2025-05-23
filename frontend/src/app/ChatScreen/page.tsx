@@ -77,9 +77,9 @@ export default function ChatScreen() {
         const data = await res.json();
         console.log("メール取得結果: ", data);
         setEmails(data.emails);
-      setFilteredEmails(data.emails); // 検索対象の初期値
+      // setFilteredEmails(data.emails); // 検索対象の初期値
         if (data.friends) {
-          setFriends(data.friends); // ← ここで初期表示に friend が入る！
+          setFriends(data.friends);
           console.log("セットフレンドは呼ばれた");
         }
       }
@@ -89,24 +89,46 @@ export default function ChatScreen() {
     }
   }, [session, status]);
 
-  useEffect(() => {
-    const fetchFriend = async () => {
-      const res = await fetch("http://localhost:8080/api/friend");
-      const data = await res.json();
-      setFriends(data);
-      setFilteredFriends(data);
-    };
-    fetchFriend();
-    console.log("friend頂き");
-  }, []);
   // useEffect(() => {
   //   const fetchFriend = async () => {
   //     const res = await fetch("http://localhost:8080/api/friend");
   //     const data = await res.json();
   //     setFriends(data);
+  //     setFilteredFriends(data);
   //   };
   //   fetchFriend();
+  //   console.log("friend頂き");
   // }, []);
+useEffect(() => {
+  const fetchFriend = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/api/friend");
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      setFriends(data);
+      setFilteredFriends(data);
+    } catch (error) {
+      console.error("友達リストの取得に失敗しました", error);
+      setFriends([]);
+      setFilteredFriends([]);
+    }
+  };
+  fetchFriend();
+  console.log("friend頂き");
+}, []);
+
+useEffect(() => {
+  if (!selectUser?.emailAddress) return;
+  const relatedEmails = emails.filter(
+    (email) =>
+      email.senderAddress === selectUser.emailAddress ||
+      email.receiverAddress === selectUser.emailAddress
+  );
+  setFilteredEmails(relatedEmails);
+}, [selectUser, emails]);
+
 
   const readHandler = (newEmail: EmailType) => {
     const newEmails = emails.map((email) =>
@@ -126,7 +148,7 @@ export default function ChatScreen() {
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
-              {/* <FriendSearch userList={UserList} onFilter={setFilteredUsers} />  */}
+
               <GenericSearch
                 originalList={friends}
                 onFilter={setFilteredFriends}
@@ -183,10 +205,10 @@ export default function ChatScreen() {
                 placeholder="メッセージを検索"
               />
               <ScrollArea ref={scrollAreaRef} className="h-full">
-                {filteredEmails
-
+                {/* {filteredEmails
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
-                  .map((email) => (
+                  .map((email) => ( */}
+                  {filteredEmails.map((email) => (
                     <MessageBubble
                       scrollAreaRef={scrollAreaRef}
                       key={email.id}
