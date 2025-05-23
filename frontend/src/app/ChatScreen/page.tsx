@@ -77,9 +77,9 @@ export default function ChatScreen() {
         const data = await res.json();
         console.log("メール取得結果: ", data);
         setEmails(data.emails);
-      setFilteredEmails(data.emails); // 検索対象の初期値
+      // setFilteredEmails(data.emails); // 検索対象の初期値
         if (data.friends) {
-          setFriends(data.friends); // ← ここで初期表示に friend が入る！
+          setFriends(data.friends);
           console.log("セットフレンドは呼ばれた");
         }
       }
@@ -119,6 +119,16 @@ useEffect(() => {
   console.log("friend頂き");
 }, []);
 
+useEffect(() => {
+  if (!selectUser?.emailAddress) return;
+  const relatedEmails = emails.filter(
+    (email) =>
+      email.senderAddress === selectUser.emailAddress ||
+      email.receiverAddress === selectUser.emailAddress
+  );
+  setFilteredEmails(relatedEmails);
+}, [selectUser, emails]);
+
 
   const readHandler = (newEmail: EmailType) => {
     const newEmails = emails.map((email) =>
@@ -138,7 +148,7 @@ useEffect(() => {
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden">
-              {/* <FriendSearch userList={UserList} onFilter={setFilteredUsers} />  */}
+
               <GenericSearch
                 originalList={friends}
                 onFilter={setFilteredFriends}
@@ -195,10 +205,10 @@ useEffect(() => {
                 placeholder="メッセージを検索"
               />
               <ScrollArea ref={scrollAreaRef} className="h-full">
-                {filteredEmails
-
+                {/* {filteredEmails
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
-                  .map((email) => (
+                  .map((email) => ( */}
+                  {filteredEmails.map((email) => (
                     <MessageBubble
                       scrollAreaRef={scrollAreaRef}
                       key={email.id}
