@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import List
 from models.email_model import Email
 from models.friend_model import Friend
-from db.database import get_emails_from_db, is_user_registered, post_email_to_db, post_friend_to_db,post_user_to_db,get_emails_by_email, get_friend_from_db# DBからの取得関数
+from db.database import get_emails_from_db, is_user_registered, post_email_to_db, post_friend_to_db,post_user_to_db,get_emails_by_email, get_friend_from_db, patch_email_to_isread# DBからの取得関数
 from gmail_controllers.gmail_fetcher import get_gmail_service, fetch_message_list
 from datetime import datetime
 import uuid
@@ -107,3 +107,6 @@ def get_emails(req: EmailFetchRequest):
     friend = get_friend_from_db(req.userId)
     print(friend)
     return {"emails": emails, "friends": friend}
+@router.patch("/emails/{email_id}")
+def patch_emails(email_id: str):
+    return patch_email_to_isread(email_id)

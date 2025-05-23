@@ -1,27 +1,19 @@
-
 import { useSession } from "next-auth/react";
-import { RefObject, useEffect, useState } from "react"
+import { RefObject, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { toast, type Toast } from "sonner";
+import type { EmailType } from "@/type/EmailType";
 
 type MessageBubbleProps = {
   scrollAreaRef: RefObject<HTMLDivElement>;
-  text: string;
-  sender: string;
-  time: string;
-  read: boolean;
-  snippet: string | undefined;
-  subject: string | undefined;
+  email: EmailType;
+  readHandler: (x: EmailType) => void;
 };
 
 export default function MessageBubble({
   scrollAreaRef,
-  text,
-  sender,
-  time,
-  read,
-  snippet,
-  subject,
+  email,
+  readHandler,
 }: MessageBubbleProps) {
   const { data: session } = useSession();
   const [scrollAreaRect, setScrollAreaRect] = useState<DOMRect | null>(null);
@@ -38,24 +30,39 @@ export default function MessageBubble({
     return `${hours}:${minutes}`;
   };
 
-  read = true; //一時的に全部既読にしてます
+  const patchReadHandler = async(newEmail: EmailType) => {
+      console.log("patch開始しました")
+      const res = await fetch(`http://localhost:8080/api/emails/${newEmail.id}`,{
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      const data = await res.json()
+      console.log(data)
+      readHandler(newEmail);
+  }
   return (
     <div
       className={cn(
         "flex  w-full",
-        sender == session?.user?.email ? "justify-end" : "justify-start"
+        email.senderAddress == session?.user?.email
+          ? "justify-end"
+          : "justify-start"
       )}
     >
       <div
         className={cn(
           "flex  items-end max-w-md",
-          sender == session?.user?.email ? "flex-row-reverse" : "flex-row"
+          email.senderAddress == session?.user?.email
+            ? "flex-row-reverse"
+            : "flex-row"
         )}
       >
         <div
           className={cn(
             "  px-4 py-2 mb-1 mt-1 rounded-2xl shadow text-black",
-            sender == session?.user?.email
+            email.senderAddress == session?.user?.email
               ? "bg-green-300 rounded-tr-none"
               : "bg-blue-100 rounded-tl-none"
           )}
@@ -64,7 +71,7 @@ export default function MessageBubble({
 
             const toastWidth = scrollAreaRect.width - 90;
             const toastHeight = scrollAreaRect.height - 40;
-            const toastTop = scrollAreaRect.top 
+            const toastTop = scrollAreaRect.top;
             toast.custom((t: Toast) => (
               <div
                 style={{
@@ -78,33 +85,45 @@ export default function MessageBubble({
                 className="bg-white  rounded-lg shadow-lg text-black  flex flex-col"
               >
                 <div className="p-6 overflow-y-auto">
-                <p className="font-bold mb-2">件名: {subject}</p>
-                <div className="break-words">{text}</div>
+                  <p className="font-bold mb-2">件名: {email.subject}</p>
+                  <div className="break-words">{email.content}</div>
                 </div>
-                
-                <div className="border-t px-4 py-2">
 
-                <button
-                  className="mt-4 text-blue-500 underline"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toast.dismiss(t.id);
-                  }}
-                >
-                  閉じる
-                </button>
+                <div className="border-t px-4 py-2">
+                  <button
+                    className="mt-4 text-blue-500 underline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toast.dismiss(t.id);
+                      if (email.senderAddress != session?.user?.email) {
+                        const newEmail = { ...email, isRead: true };
+                        patchReadHandler(newEmail)
+                      }
+                    }}
+                  >
+                    閉じる
+                  </button>
                 </div>
               </div>
             ));
           }}
         >
-          <p className="test-sm break-words font-semibold">件名: {subject}</p>
+          <p className="test-sm break-words font-semibold">
+            件名: {email.subject}
+          </p>
           <br />
-          <p className="test-sm break-words">{snippet}</p>
+          <p className="test-sm break-words">{email.snippet}</p>
         </div>
         <div className="flex flex-col">
-          <div className="text-xs text-gray-500 pl-1">{read && "既読"}</div>
-          <div className="text-xs text-gray-500">{formatTime(time)}</div>
+          {email.senderAddress != session?.user?.email && (
+            <div className="text-xs text-gray-500 pl-1">
+              {email.isRead && "既読"}
+            </div>
+          )}
+
+          <div className="text-xs text-gray-500">
+            {formatTime(email.createdAt)}
+          </div>
         </div>
       </div>
     </div>
