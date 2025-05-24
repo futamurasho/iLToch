@@ -160,16 +160,32 @@ const config = {
       fromEnvVar: null,
       value: "prisma-client-js",
     },
+<<<<<<< HEAD
+    "output": {
+      "value": "C:\\Users\\NOTE32\\Downloads\\chatapp\\iLToch\\backend\\src\\src\\generated\\prisma",
+      "fromEnvVar": null
+=======
     output: {
       value:
         "/Users/futamurasho/git_project/iLToch/backend/src/src/generated/prisma",
       fromEnvVar: null,
+>>>>>>> main
     },
     config: {
       engineType: "library",
     },
     binaryTargets: [
       {
+<<<<<<< HEAD
+        "fromEnvVar": null,
+        "value": "windows",
+        "native": true
+      }
+    ],
+    "previewFeatures": [],
+    "sourceFilePath": "C:\\Users\\NOTE32\\Downloads\\chatapp\\iLToch\\backend\\src\\prisma\\schema.prisma",
+    "isCustomOutput": true
+=======
         fromEnvVar: null,
         value: "darwin",
         native: true,
@@ -179,6 +195,7 @@ const config = {
     sourceFilePath:
       "/Users/futamurasho/git_project/iLToch/backend/src/prisma/schema.prisma",
     isCustomOutput: true,
+>>>>>>> main
   },
   relativeEnvPaths: {
     rootEnvPath: null,
@@ -241,11 +258,16 @@ exports.PrismaClient = PrismaClient;
 Object.assign(exports, Prisma);
 
 // file annotations for bundling tools to include these files
+<<<<<<< HEAD
+path.join(__dirname, "query_engine-windows.dll.node");
+path.join(process.cwd(), "src/generated/prisma/query_engine-windows.dll.node")
+=======
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
 path.join(
   process.cwd(),
   "src/generated/prisma/libquery_engine-darwin-arm64.dylib.node"
 );
+>>>>>>> main
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/generated/prisma/schema.prisma");

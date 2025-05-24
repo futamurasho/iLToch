@@ -1,31 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import MailIconWithBadge from './MailIconWithBadge';
-import NewMailNotifier from './NewMailNotifier';
+'use client';
 
-const MailApp = () => {
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [newMail, setNewMail] = useState(null);
+import { useEffect, useRef, useState } from 'react';
+
+export default function NoticePage() {
+  const email = "qingxiangzhuwei@gmail.com";
+  const socketRef = useRef<WebSocket | null>(null);
+  const [notifications, setNotifications] = useState<any[]>([]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetch('/api/mail/check')
-        .then(res => res.json())
-        .then(data => {
-          setUnreadCount(data.unreadCount);
-          if (data.latestMail) {
-            setNewMail(data.latestMail);
+    if (!email) return;
+
+    const connect = () => {
+      const socket = new WebSocket(`ws://localhost:8080/ws/${email}`);
+      socketRef.current = socket;
+
+      socket.onopen = () => {
+        console.log("✅ WebSocket 接続成功");
+
+        const ping = setInterval(() => {
+          if (socket.readyState === WebSocket.OPEN) {
+            socket.send("ping");
           }
-        });
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+        }, 10000);
+
+        socket.onclose = () => {
+          console.log("🔌 WebSocket 切断 → 再接続を試みます");
+          clearInterval(ping);
+          setTimeout(connect, 3000);
+        };
+      };
+
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log("📩 通知:", data);
+        setNotifications((prev) => [...prev, data]);
+      };
+
+      socket.onerror = (err) => {
+        console.error("❌ WebSocket エラー:", err);
+      };
+    };
+
+    connect();
+
+    return () => {
+      socketRef.current?.close();
+    };
+  }, [email]);
 
   return (
-    <div>
-      <MailIconWithBadge unreadCount={unreadCount} />
-      <NewMailNotifier newMail={newMail} />
+    <div className="p-4">
+      <h1 className="text-xl font-bold">📨 通知一覧</h1>
+      {notifications.length === 0 && <p>通知はまだありません</p>}
+      {notifications.map((n, i) => (
+        <div key={i} className="p-2 border rounded my-2">
+          <p><strong>件名:</strong> {n.subject}</p>
+          <p><strong>差出人:</strong> {n.from}</p>
+          <p><strong>受信日時:</strong> {n.receivedAt}</p>
+          <p><strong>スニペット:</strong> {n.snippet}</p>
+        </div>
+      ))}
     </div>
   );
-};
-
-export default MailApp;
+}
