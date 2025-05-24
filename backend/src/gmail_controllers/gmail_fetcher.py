@@ -32,7 +32,7 @@ def get_gmail_service(access_token):
     creds = Credentials(token=access_token)
     return build('gmail', 'v1', credentials=creds)
 
-def fetch_message_list(service, user_id="me", query="is:unread", count=10):
+def fetch_message_list(service, user_id="me", query="in:inbox is:unread", count=10):
     messages = []
     try:
         message_ids = service.users().messages().list(

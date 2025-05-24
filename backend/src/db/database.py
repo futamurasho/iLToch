@@ -7,7 +7,7 @@ import os
 from fastapi import HTTPException
 from datetime import datetime
 from typing import Dict
-
+import uuid
 
 
 DB_PATH = "prisma/dev.db"
@@ -146,32 +146,38 @@ def post_user_to_db(id: str,email:str, accessToken: str, refreshToken: str, toke
 
 #メールの保存
 def post_email_to_db(email: Email)-> None:
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT OR IGNORE INTO emails (
-            id, userId, gmailMessageId, subject, senderAddress,receiverAddress, content,html_content, snippet,
-            receivedAt, isRead, isNotified, customLabel
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?)
-    """, (
-        email.id,
-        email.userId,
-        email.gmailMessageId,
-        email.subject,
-        email.senderAddress,
-        email.receiverAddress,
-        email.content,
-        email.html_content,
-        email.snippet,
-        email.receivedAt,
-        int(email.isRead),
-        int(email.isNotified),
-        email.customLabel
-    ))
-    conn.commit()
-    conn.close()
-    print("post_email_to_db clear")
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""
+                       INSERT OR IGNORE INTO emails (
+                       id, userId, gmailMessageId, subject, senderAddress,receiverAddress, content,html_content, snippet,
+                       receivedAt, isRead, isNotified, customLabel
+                       )
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?)
+                    """, (
+                        email.id,
+                        email.userId,
+                        email.gmailMessageId,
+                        email.subject,
+                        email.senderAddress,
+                        email.receiverAddress,
+                        email.content,
+                        email.html_content,
+                        email.snippet,
+                        email.receivedAt,
+                        int(email.isRead),
+                        int(email.isNotified),
+                        email.customLabel
+                        ))
+        conn.commit()
+        return cursor.rowcount > 0
+    except Exception as e:
+        print(f"❌ DB挿入エラー: {e}")
+        return False
+    finally:
+        conn.close()
+        print("post_email_to_db clear")
 
 #フレンドをDBに登録
 def post_friend_to_db(friend: Friend) -> None:
@@ -265,3 +271,99 @@ def patch_email_to_isread(email_id: str ):
     finally:
         conn.close()
     return {"message": "Email isRead updated successfully"}
+
+#ユーザ一覧取得
+def get_all_users():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, email, accessToken, refreshToken, tokenExpiry FROM users")
+    users = cursor.fetchall()
+    conn.close()
+
+    user_list = []
+    for row in users:
+        user_list.append({
+            "id": row[0],
+            "email": row[1],
+            "access_token": row[2],
+            "refresh_token": row[3],
+            "token_expiry": row[4]
+        })
+    return user_list
+
+#トークン更新時にDBに保存
+def update_user_token(user_id: str, access_token: str, token_expiry: datetime):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE users
+        SET accessToken = ?, tokenExpiry = ?
+        WHERE id = ?
+    """, (access_token, token_expiry.isoformat(), user_id))
+    conn.commit()
+    conn.close()
+
+#
+def patch_email_to_notified(email_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "UPDATE emails SET isNotified = true WHERE id = ?",
+            (email_id,)
+        )
+        conn.commit()
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Email not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"通知フラグ更新失敗: {str(e)}")
+    finally:
+        conn.close()
+    return {"message": "Email isNotified updated successfully"}
+
+
+#グループ作成
+def post_group_to_db(user_id: str, group_name: str, friend_ids: list[str]) -> str:
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    group_id = str(uuid.uuid4())  # Prismaのcuid相当
+
+    try:
+        # Groupテーブルに登録
+        cursor.execute(
+            """
+            INSERT INTO groups (id, name, userId, createdAt)
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                group_id,
+                group_name,
+                user_id,
+                datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            )
+        )
+
+        # FriendGroupテーブルに登録（複数行）
+        for friend_id in friend_ids:
+            friend_group_id = str(uuid.uuid4())
+            cursor.execute(
+                """
+                INSERT INTO friend_groups (id, groupId, friendId)
+                VALUES (?, ?, ?)
+                """,
+                (
+                    friend_group_id,
+                    group_id,
+                    friend_id
+                )
+            )
+
+        conn.commit()
+        return group_id
+
+    except sqlite3.IntegrityError as e:
+        raise HTTPException(status_code=409, detail="グループまたはメンバー登録が重複しています")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"グループ作成に失敗しました: {str(e)}")
+    finally:
+        conn.close()
