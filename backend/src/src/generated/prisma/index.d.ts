@@ -2217,6 +2217,7 @@ export namespace Prisma {
     senderAddress: string | null
     receiverAddress: string | null
     content: string | null
+    html_content: string | null
     snippet: string | null
     receivedAt: Date | null
     isRead: boolean | null
@@ -2233,6 +2234,7 @@ export namespace Prisma {
     senderAddress: string | null
     receiverAddress: string | null
     content: string | null
+    html_content: string | null
     snippet: string | null
     receivedAt: Date | null
     isRead: boolean | null
@@ -2249,6 +2251,7 @@ export namespace Prisma {
     senderAddress: number
     receiverAddress: number
     content: number
+    html_content: number
     snippet: number
     receivedAt: number
     isRead: number
@@ -2267,6 +2270,7 @@ export namespace Prisma {
     senderAddress?: true
     receiverAddress?: true
     content?: true
+    html_content?: true
     snippet?: true
     receivedAt?: true
     isRead?: true
@@ -2283,6 +2287,7 @@ export namespace Prisma {
     senderAddress?: true
     receiverAddress?: true
     content?: true
+    html_content?: true
     snippet?: true
     receivedAt?: true
     isRead?: true
@@ -2299,6 +2304,7 @@ export namespace Prisma {
     senderAddress?: true
     receiverAddress?: true
     content?: true
+    html_content?: true
     snippet?: true
     receivedAt?: true
     isRead?: true
@@ -2388,6 +2394,7 @@ export namespace Prisma {
     senderAddress: string
     receiverAddress: string
     content: string
+    html_content: string
     snippet: string | null
     receivedAt: Date | null
     isRead: boolean
@@ -2421,6 +2428,7 @@ export namespace Prisma {
     senderAddress?: boolean
     receiverAddress?: boolean
     content?: boolean
+    html_content?: boolean
     snippet?: boolean
     receivedAt?: boolean
     isRead?: boolean
@@ -2438,6 +2446,7 @@ export namespace Prisma {
     senderAddress?: boolean
     receiverAddress?: boolean
     content?: boolean
+    html_content?: boolean
     snippet?: boolean
     receivedAt?: boolean
     isRead?: boolean
@@ -2455,6 +2464,7 @@ export namespace Prisma {
     senderAddress?: boolean
     receiverAddress?: boolean
     content?: boolean
+    html_content?: boolean
     snippet?: boolean
     receivedAt?: boolean
     isRead?: boolean
@@ -2472,6 +2482,7 @@ export namespace Prisma {
     senderAddress?: boolean
     receiverAddress?: boolean
     content?: boolean
+    html_content?: boolean
     snippet?: boolean
     receivedAt?: boolean
     isRead?: boolean
@@ -2480,7 +2491,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type EmailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "gmailMessageId" | "subject" | "senderAddress" | "receiverAddress" | "content" | "snippet" | "receivedAt" | "isRead" | "isNotified" | "customLabel" | "createdAt", ExtArgs["result"]["email"]>
+  export type EmailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "gmailMessageId" | "subject" | "senderAddress" | "receiverAddress" | "content" | "html_content" | "snippet" | "receivedAt" | "isRead" | "isNotified" | "customLabel" | "createdAt", ExtArgs["result"]["email"]>
   export type EmailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2504,6 +2515,7 @@ export namespace Prisma {
       senderAddress: string
       receiverAddress: string
       content: string
+      html_content: string
       snippet: string | null
       receivedAt: Date | null
       isRead: boolean
@@ -2941,6 +2953,7 @@ export namespace Prisma {
     readonly senderAddress: FieldRef<"Email", 'String'>
     readonly receiverAddress: FieldRef<"Email", 'String'>
     readonly content: FieldRef<"Email", 'String'>
+    readonly html_content: FieldRef<"Email", 'String'>
     readonly snippet: FieldRef<"Email", 'String'>
     readonly receivedAt: FieldRef<"Email", 'DateTime'>
     readonly isRead: FieldRef<"Email", 'Boolean'>
@@ -4459,6 +4472,7 @@ export namespace Prisma {
     senderAddress: 'senderAddress',
     receiverAddress: 'receiverAddress',
     content: 'content',
+    html_content: 'html_content',
     snippet: 'snippet',
     receivedAt: 'receivedAt',
     isRead: 'isRead',
@@ -4608,6 +4622,7 @@ export namespace Prisma {
     senderAddress?: StringFilter<"Email"> | string
     receiverAddress?: StringFilter<"Email"> | string
     content?: StringFilter<"Email"> | string
+    html_content?: StringFilter<"Email"> | string
     snippet?: StringNullableFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableFilter<"Email"> | Date | string | null
     isRead?: BoolFilter<"Email"> | boolean
@@ -4625,6 +4640,7 @@ export namespace Prisma {
     senderAddress?: SortOrder
     receiverAddress?: SortOrder
     content?: SortOrder
+    html_content?: SortOrder
     snippet?: SortOrderInput | SortOrder
     receivedAt?: SortOrderInput | SortOrder
     isRead?: SortOrder
@@ -4645,6 +4661,7 @@ export namespace Prisma {
     senderAddress?: StringFilter<"Email"> | string
     receiverAddress?: StringFilter<"Email"> | string
     content?: StringFilter<"Email"> | string
+    html_content?: StringFilter<"Email"> | string
     snippet?: StringNullableFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableFilter<"Email"> | Date | string | null
     isRead?: BoolFilter<"Email"> | boolean
@@ -4662,6 +4679,7 @@ export namespace Prisma {
     senderAddress?: SortOrder
     receiverAddress?: SortOrder
     content?: SortOrder
+    html_content?: SortOrder
     snippet?: SortOrderInput | SortOrder
     receivedAt?: SortOrderInput | SortOrder
     isRead?: SortOrder
@@ -4684,6 +4702,7 @@ export namespace Prisma {
     senderAddress?: StringWithAggregatesFilter<"Email"> | string
     receiverAddress?: StringWithAggregatesFilter<"Email"> | string
     content?: StringWithAggregatesFilter<"Email"> | string
+    html_content?: StringWithAggregatesFilter<"Email"> | string
     snippet?: StringNullableWithAggregatesFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableWithAggregatesFilter<"Email"> | Date | string | null
     isRead?: BoolWithAggregatesFilter<"Email"> | boolean
@@ -4831,6 +4850,7 @@ export namespace Prisma {
     senderAddress: string
     receiverAddress: string
     content: string
+    html_content: string
     snippet?: string | null
     receivedAt?: Date | string | null
     isRead?: boolean
@@ -4848,6 +4868,7 @@ export namespace Prisma {
     senderAddress: string
     receiverAddress: string
     content: string
+    html_content: string
     snippet?: string | null
     receivedAt?: Date | string | null
     isRead?: boolean
@@ -4863,6 +4884,7 @@ export namespace Prisma {
     senderAddress?: StringFieldUpdateOperationsInput | string
     receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    html_content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -4880,6 +4902,7 @@ export namespace Prisma {
     senderAddress?: StringFieldUpdateOperationsInput | string
     receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    html_content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -4896,6 +4919,7 @@ export namespace Prisma {
     senderAddress: string
     receiverAddress: string
     content: string
+    html_content: string
     snippet?: string | null
     receivedAt?: Date | string | null
     isRead?: boolean
@@ -4911,6 +4935,7 @@ export namespace Prisma {
     senderAddress?: StringFieldUpdateOperationsInput | string
     receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    html_content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -4927,6 +4952,7 @@ export namespace Prisma {
     senderAddress?: StringFieldUpdateOperationsInput | string
     receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    html_content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -5162,6 +5188,7 @@ export namespace Prisma {
     senderAddress?: SortOrder
     receiverAddress?: SortOrder
     content?: SortOrder
+    html_content?: SortOrder
     snippet?: SortOrder
     receivedAt?: SortOrder
     isRead?: SortOrder
@@ -5178,6 +5205,7 @@ export namespace Prisma {
     senderAddress?: SortOrder
     receiverAddress?: SortOrder
     content?: SortOrder
+    html_content?: SortOrder
     snippet?: SortOrder
     receivedAt?: SortOrder
     isRead?: SortOrder
@@ -5194,6 +5222,7 @@ export namespace Prisma {
     senderAddress?: SortOrder
     receiverAddress?: SortOrder
     content?: SortOrder
+    html_content?: SortOrder
     snippet?: SortOrder
     receivedAt?: SortOrder
     isRead?: SortOrder
@@ -5545,6 +5574,7 @@ export namespace Prisma {
     senderAddress: string
     receiverAddress: string
     content: string
+    html_content: string
     snippet?: string | null
     receivedAt?: Date | string | null
     isRead?: boolean
@@ -5560,6 +5590,7 @@ export namespace Prisma {
     senderAddress: string
     receiverAddress: string
     content: string
+    html_content: string
     snippet?: string | null
     receivedAt?: Date | string | null
     isRead?: boolean
@@ -5629,6 +5660,7 @@ export namespace Prisma {
     senderAddress?: StringFilter<"Email"> | string
     receiverAddress?: StringFilter<"Email"> | string
     content?: StringFilter<"Email"> | string
+    html_content?: StringFilter<"Email"> | string
     snippet?: StringNullableFilter<"Email"> | string | null
     receivedAt?: DateTimeNullableFilter<"Email"> | Date | string | null
     isRead?: BoolFilter<"Email"> | boolean
@@ -5784,6 +5816,7 @@ export namespace Prisma {
     senderAddress: string
     receiverAddress: string
     content: string
+    html_content: string
     snippet?: string | null
     receivedAt?: Date | string | null
     isRead?: boolean
@@ -5807,6 +5840,7 @@ export namespace Prisma {
     senderAddress?: StringFieldUpdateOperationsInput | string
     receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    html_content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -5822,6 +5856,7 @@ export namespace Prisma {
     senderAddress?: StringFieldUpdateOperationsInput | string
     receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    html_content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean
@@ -5837,6 +5872,7 @@ export namespace Prisma {
     senderAddress?: StringFieldUpdateOperationsInput | string
     receiverAddress?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    html_content?: StringFieldUpdateOperationsInput | string
     snippet?: NullableStringFieldUpdateOperationsInput | string | null
     receivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRead?: BoolFieldUpdateOperationsInput | boolean

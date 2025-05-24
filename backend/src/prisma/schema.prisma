@@ -32,6 +32,7 @@ model Email {
   senderAddress    String                             // 差出人（メールアドレスや名前）
   receiverAddress  String                             // 受取人（メールアドレスや名前）
   content          String                             // メールの本文
+  html_content     String                             // html型のメール本文
   snippet          String?                            // メール本文の冒頭（プレビュー）
   receivedAt       DateTime?                          // メールの受信時刻
   isRead           Boolean   @default(false)          // 既読状態

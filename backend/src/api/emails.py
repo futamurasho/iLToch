@@ -72,6 +72,7 @@ def get_emails(req: EmailFetchRequest):
                 senderAddress=friend_email,
                 receiverAddress=user_email,
                 content=email_data.get("body", ""),
+                html_content=email_data.get("html_body", ""),
                 snippet=email_data.get("snippet", ""),
                 receivedAt=email_data.get("received_at", None),
                 isRead=False,
@@ -105,7 +106,6 @@ def get_emails(req: EmailFetchRequest):
     # メールアドレスからメールを直接取得
     emails = get_emails_by_email(user_email)
     friend = get_friend_from_db(req.userId)
-    print(friend)
     return {"emails": emails, "friends": friend}
 @router.patch("/emails/{email_id}")
 def patch_emails(email_id: str):

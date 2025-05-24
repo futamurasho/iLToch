@@ -49,6 +49,7 @@ def fetch_message_list(service, user_id="me", query="is:unread", count=10):
             message = {
                 "id": message_id["id"],
                 "body": "",
+                "html_body":"",
                 "subject": "",
                 "sender": "",
                 "content": "",
@@ -56,19 +57,45 @@ def fetch_message_list(service, user_id="me", query="is:unread", count=10):
                 "received_at": datetime.fromtimestamp(int(detail.get("internalDate", "0")) / 1000).isoformat()
             }
 
-            if 'data' in payload.get('body', {}):
-                decoded_bytes = base64.urlsafe_b64decode(payload["body"]["data"])
-                message["body"] = decoded_bytes.decode("UTF-8")
-            else:
-                # パート構造になってる場合（HTML/プレーン両方あるなど）
-                #text/plain の本文だけを拾って使う
-                #のちにhtmlに対応させる改良ができる
-                parts = payload.get("parts", [])
-                for part in parts:
-                    if part.get("mimeType") == "text/plain" and 'data' in part.get("body", {}):
-                        decoded_bytes = base64.urlsafe_b64decode(part["body"]["data"])
-                        message["body"] = decoded_bytes.decode("UTF-8")
-                        break  # 最初のプレーンテキストで十分
+             # 本文の抽出
+            body_data = payload.get("body", {}).get("data")
+            mime_type = payload.get("mimeType", "")
+
+            # 単一パートの場合
+            if body_data:
+                decoded = base64.urlsafe_b64decode(body_data).decode("utf-8", errors="replace")
+                if mime_type == "text/html":
+                    message["html_body"] = decoded
+                else:
+                    message["body"] = decoded
+            # マルチパートの場合
+            elif mime_type.startswith("multipart/") and "parts" in payload:
+                for part in payload["parts"]:
+                    part_mime = part.get("mimeType")
+                    data = part.get("body", {}).get("data")
+                    if not data:
+                        continue
+                    decoded = base64.urlsafe_b64decode(data).decode("utf-8", errors="replace")
+
+                    if part_mime == "text/html":
+                        message["html_body"] = decoded
+                    elif part_mime == "text/plain" and not message["body"]:
+                        message["body"] = decoded
+
+
+            # if 'data' in payload.get('body', {}):
+            #     decoded_bytes = base64.urlsafe_b64decode(payload["body"]["data"])
+            #     message["body"] = decoded_bytes.decode("UTF-8")
+            # else:
+            #     # パート構造になってる場合（HTML/プレーン両方あるなど）
+            #     #text/plain の本文だけを拾って使う
+            #     #のちにhtmlに対応させる改良ができる
+            #     parts = payload.get("parts", [])
+            #     for part in parts:
+            #         if part.get("mimeType") == "text/plain" and 'data' in part.get("body", {}):
+            #             decoded_bytes = base64.urlsafe_b64decode(part["body"]["data"])
+            #             message["body"] = decoded_bytes.decode("UTF-8")
+            #             break  # 最初のプレーンテキストで十分
             
             #ヘッダー（Subject, From, To など）
             for header in payload.get("headers", []):
