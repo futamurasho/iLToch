@@ -6,3 +6,4 @@ src/token.json
 node_modules
 src/prisma/dev.db
 src/prisma/dev.db-journal
+.env
