@@ -250,9 +250,9 @@ export default function FriendRegister() {
             </CardContent>
           </Card>
         </div>
-        <div className="flex-1 h-full p-4">
+        <div className="flex-1 h-full p-4 overflow-hidden">
           <Card
-            className={` h-full   p-4 transition-all ${
+            className={` h-full   p-4 transition-all  overflow-hidden ${
               isOver ? "bg-gray-200 border-dashed" : "bg-white"
             }`}
             onDragOver={(e) => e.preventDefault()}
@@ -267,10 +267,10 @@ export default function FriendRegister() {
                 ここにドロップしてグループ作成
               </p>
             )}
-
-            <ul>
+            <div className="flex-1 overflow-hidden">
+            <ScrollArea className="h-full ">  
               {selectedFriends.map((f) => (
-                <li key={f.id} className="p-1 flex justify-between border-b">
+                <div key={f.id} className="p-1 flex justify-between border-b">
                   <span>{f.name}</span>
                   <button
                     className="text-red-500 text-sm hover:underline"
@@ -282,10 +282,10 @@ export default function FriendRegister() {
                   >
                     ✕
                   </button>
-                </li>
+                </div>
               ))}
-            </ul>
-
+            </ScrollArea>
+            </div>
             {selectedFriends.length > 0 && (
               <div className="mt-4 flex">
                 <Input
