@@ -14,7 +14,6 @@ import { EmailType } from "@/type/EmailType";
 import { FriendsType } from "@/type/FriendsType";
 import { useRouter } from "next/navigation";
 
-
 const UserList: UserListType[] = [
   {
     id: 1,
@@ -48,39 +47,38 @@ export default function ChatScreen() {
   //status内にはloading,authenticated,unauthenticatedの状態を持つ、つまり、ログイン状態かそうでないか
   const { data: session, status } = useSession();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null);
   const sortedFriends = [...filteredFriends].sort((a, b) => {
-  const getEmailsForUser = (user: FriendsType) =>
-    emails.filter(
-      (email) =>
-        email.senderAddress === user.emailAddress || email.receiverAddress === user.emailAddress
-    );
-  const aEmails = getEmailsForUser(a);
-  const bEmails = getEmailsForUser(b);
-  const aHasUnread = aEmails.some((email) => !email.isRead);
-  const bHasUnread = bEmails.some((email) => !email.isRead);
-  const getLatestTimestamp = (emails: EmailType[]) =>
-    emails.length > 0
-      ? Math.max(
-          ...emails.map((email) =>
-            email.receivedAt
-              ? new Date(email.receivedAt).getTime()
-              : new Date(email.createdAt).getTime()
+    const getEmailsForUser = (user: FriendsType) =>
+      emails.filter(
+        (email) =>
+          email.senderAddress === user.emailAddress ||
+          email.receiverAddress === user.emailAddress
+      );
+    const aEmails = getEmailsForUser(a);
+    const bEmails = getEmailsForUser(b);
+    const aHasUnread = aEmails.some((email) => !email.isRead);
+    const bHasUnread = bEmails.some((email) => !email.isRead);
+    const getLatestTimestamp = (emails: EmailType[]) =>
+      emails.length > 0
+        ? Math.max(
+            ...emails.map((email) =>
+              email.receivedAt
+                ? new Date(email.receivedAt).getTime()
+                : new Date(email.createdAt).getTime()
+            )
           )
-        )
-      : 0;
-  const aLatest = getLatestTimestamp(aEmails);
-  const bLatest = getLatestTimestamp(bEmails);
+        : 0;
+    const aLatest = getLatestTimestamp(aEmails);
+    const bLatest = getLatestTimestamp(bEmails);
 
-  // 未読があるかどうかで優先順位を決定（未読ありを優先）
-  if (aHasUnread !== bHasUnread) return bHasUnread ? 1 : -1;
+    // 未読があるかどうかで優先順位を決定（未読ありを優先）
+    if (aHasUnread !== bHasUnread) return bHasUnread ? 1 : -1;
 
-  // 未読状態が同じなら、最新メールの日付が新しい順にソート
-  return bLatest - aLatest;
-});
-  const router = useRouter()
-
-
+    // 未読状態が同じなら、最新メールの日付が新しい順にソート
+    return bLatest - aLatest;
+  });
+  const router = useRouter();
 
   useEffect(() => {
     //ここで、DBにすでに登録されているユーザかどうかで処理が変わる
@@ -155,15 +153,18 @@ export default function ChatScreen() {
   //   console.log("friend頂き");
   // }, []);
 
-  useEffect(() => {
-    if (!selectUser?.emailAddress) return;
-    const relatedEmails = emails.filter(
-      (email) =>
-        email.senderAddress === selectUser.emailAddress ||
-        email.receiverAddress === selectUser.emailAddress
-    );
-    setFilteredEmails(relatedEmails);
-  }, [selectUser, emails]);
+  // useEffect(() => {
+  //   if (!selectUser?.emailAddress) return;
+  //   const relatedEmails = emails.filter(
+  //     (email) =>
+  //       email.senderAddress === selectUser.emailAddress ||
+  //       email.receiverAddress === selectUser.emailAddress
+  //   );
+  //   setFilteredEmails(relatedEmails);
+  //   console.log(filteredEmails)
+  //   console.log(selectUser.emailAddress)
+  //   console.log("これ何",relatedEmails)
+  // }, [selectUser, emails]);
 
   const readHandler = (newEmail: EmailType) => {
     const newEmails = emails.map((email) =>
@@ -173,11 +174,10 @@ export default function ChatScreen() {
     setEmails(newEmails);
   };
   useLayoutEffect(() => {
-    if(scrollRef.current){
-      scrollRef?.current?.scrollIntoView() 
+    if (scrollRef.current) {
+      scrollRef?.current?.scrollIntoView();
     }
-  }, [filteredEmails]
-  )
+  }, [filteredEmails]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -189,7 +189,6 @@ export default function ChatScreen() {
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden flex flex-col">
-
               <GenericSearch
                 originalList={friends}
                 onFilter={setFilteredFriends}
@@ -197,135 +196,158 @@ export default function ChatScreen() {
                 placeholder="フレンドを検索"
               />
               <div className="flex-1 overflow-hidden">
-              <ScrollArea className="h-full ">
-                {Array.isArray(filteredFriends) &&
-                filteredFriends.length > 0 ? (
-                  sortedFriends.map((user) => {
-                    const unreadCount = emails.filter(
-                      (email) =>
-                        email.senderAddress === user.emailAddress &&
-                        email.isRead === false
-                    ).length;
+                <ScrollArea className="h-full ">
+                  {Array.isArray(filteredFriends) &&
+                  filteredFriends.length > 0 ? (
+                    sortedFriends.map((user) => {
+                      const unreadCount = emails.filter(
+                        (email) =>
+                          email.senderAddress === user.emailAddress &&
+                          email.isRead === false
+                      ).length;
 
-                    return (
-                      <div
-                        key={user.id}
-                        className="flex justify-between border-b hover:bg-gray-100 cursor-pointer "
-                        onClick={() => {
-                          setSelectUser(user);
-                        }}
-                      >
-                        <div className="p-2 text-lg">
-                          {user.name ? user.name : user.emailAddress}
-                        </div>
-                        {unreadCount > 0 && (
-                          <div className="p-2 mr-4 mt-1 rounded-full bg-red-500 text-white w-8 h-8 flex items-center justify-center">
-                            {unreadCount}
+                      return (
+                        <div
+                          key={user.id}
+                          className="flex justify-between border-b hover:bg-gray-100 cursor-pointer "
+                          onClick={() => {
+                            setSelectUser(user);
+                          }}
+                        >
+                          <div className="p-2 text-lg">
+                            {user.name ? user.name : user.emailAddress}
                           </div>
-                        )}
-                      </div>
-                    );
-                  })
-                ) :  status == "authenticated" ? (
-                  <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
-                    No friends...
-                  </div>
-                ) : (
-                  <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
-                    Loading....
-                  </div>
-                )}
-              </ScrollArea>
+                          {unreadCount > 0 && (
+                            <div className="p-2 mr-4 mt-1 rounded-full bg-red-500 text-white w-8 h-8 flex items-center justify-center">
+                              {unreadCount}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
+                  ) : status == "authenticated" ? (
+                    <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
+                      No friends...
+                    </div>
+                  ) : (
+                    <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
+                      Loading....
+                    </div>
+                  )}
+                </ScrollArea>
               </div>
             </CardContent>
           </Card>
         </aside>
 
         <main className="flex-1 border-r p-4 overflow-hidden flex flex-col">
-          {selectUser.id?(<Card className="flex flex-col flex-1 overflow-hidden">
-            <CardHeader className="border-b ">
-              <CardTitle className="">
-                {selectUser.name || selectUser.emailAddress }
-                からのメール
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 overflow-hidden flex flex-col">
-              <GenericSearch
-                originalList={emails}
-                onFilter={setFilteredEmails}
-                searchKey="content"
-                placeholder="メッセージを検索"
-              />
-              <div className="flex-1 overflow-hidden">
-              <ScrollArea ref={scrollAreaRef} className="h-full">
-                {/* {filteredEmails
+          {selectUser.id ? (
+            <Card className="flex flex-col flex-1 overflow-hidden">
+              <CardHeader className="border-b ">
+                <CardTitle className="">
+                  {selectUser.name || selectUser.emailAddress}
+                  からのメール
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 overflow-hidden flex flex-col">
+                <GenericSearch
+                  originalList={emails}
+                  onFilter={setFilteredEmails}
+                  searchKey="content"
+                  placeholder="メッセージを検索"
+                />
+                <div className="flex-1 overflow-hidden">
+                  <ScrollArea ref={scrollAreaRef} className="h-full">
+                    {/* {filteredEmails
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
                   .map((email) => ( */}
-                  {filteredEmails
-                  .sort((a, b) => new Date(a.receivedAt!).getTime() - new Date(b.receivedAt!).getTime())
-                  .map((email, index) => {
-                    const currentDate = email.receivedAt
-                    ? new Date(email.receivedAt).toLocaleDateString()
-                    : "";
-                    const prevReceivedAt = index > 0 ? filteredEmails[index - 1].receivedAt : undefined;
-                    const prevDate = prevReceivedAt
-                      ? new Date(prevReceivedAt).toLocaleDateString()
-                      : "";
-                    const showDate = currentDate && currentDate != prevDate
-                    
-                  return(
-                    <MessageBubble
-                      scrollAreaRef={scrollAreaRef}
-                      key={email.id}
-                      email={email}
-                      readHandler={readHandler}
-                      showDate={showDate}
-                      currentDate={currentDate}
-                    />
-                  )})}
-                <div  ref={scrollRef}></div>
-              </ScrollArea>
-              </div>
-            </CardContent>
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault(); // ← これを最初に書いておくと安全
-                const form = e.currentTarget; 
-                const formData = new FormData(form);
-                const email = formData.get("email") as string;
-                console.log(email)
+                    {filteredEmails
+                      .filter(
+                        (email) =>
+                          (email.senderAddress === selectUser.emailAddress &&
+                            email.receiverAddress === session?.user.email) ||
+                          (email.receiverAddress === selectUser.emailAddress &&
+                            email.senderAddress === session?.user.email)
+                      )
+                      .sort(
+                        (a, b) =>
+                          new Date(a.receivedAt!).getTime() -
+                          new Date(b.receivedAt!).getTime()
+                      )
+                      .map((email, index) => {
+                        const currentDate = email.receivedAt
+                          ? new Date(email.receivedAt).toLocaleDateString()
+                          : "";
+                        const prevReceivedAt =
+                          index > 0
+                            ? filteredEmails[index - 1].receivedAt
+                            : undefined;
+                        const prevDate = prevReceivedAt
+                          ? new Date(prevReceivedAt).toLocaleDateString()
+                          : "";
+                        const showDate = currentDate && currentDate != prevDate;
 
-                if (email.trim() === "")  return
+                        return (
+                          <MessageBubble
+                            scrollAreaRef={scrollAreaRef}
+                            key={email.id}
+                            email={email}
+                            readHandler={readHandler}
+                            showDate={showDate}
+                            currentDate={currentDate}
+                          />
+                        );
+                      })}
+                    <div ref={scrollRef}></div>
+                  </ScrollArea>
+                </div>
+              </CardContent>
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault(); // ← これを最初に書いておくと安全
+                  const form = e.currentTarget;
+                  const formData = new FormData(form);
+                  const email = formData.get("email") as string;
+                  console.log(email);
 
-               
-                sessionStorage.setItem("email", email);
-                sessionStorage.setItem("emailAddress", selectUser.emailAddress);
-                if (selectUser.name){
-                  sessionStorage.setItem("name", selectUser.name)
-                }
-                else sessionStorage.setItem("name", selectUser.emailAddress)
-                form.reset()
-                router.push("/MailSend")
-              }}
-            >
-              <div className="flex pr-2 pl-2">
-                <Input
-                  className="flex-1"
-                  name="email"
-                  placeholder="返信を入力"
-                />
-                <Button variant="outline" type="submit" className="bg-blue-300">
-                  送信
-                </Button>
-              </div>
-            </form>
-          </Card>):
-          (
+                  if (email.trim() === "") return;
+
+                  sessionStorage.setItem("email", email);
+                  sessionStorage.setItem(
+                    "emailAddress",
+                    selectUser.emailAddress
+                  );
+                  if (selectUser.name) {
+                    sessionStorage.setItem("name", selectUser.name);
+                  } else
+                    sessionStorage.setItem("name", selectUser.emailAddress);
+                  form.reset();
+                  router.push("/MailSend");
+                }}
+              >
+                <div className="flex pr-2 pl-2">
+                  <Input
+                    className="flex-1"
+                    name="email"
+                    placeholder="返信を入力"
+                  />
+                  <Button
+                    variant="outline"
+                    type="submit"
+                    className="bg-blue-300"
+                  >
+                    送信
+                  </Button>
+                </div>
+              </form>
+            </Card>
+          ) : (
             <main className="flex-1 flex items-center justify-center bg-muted">
-            <h2 className="text-xl text-muted-foreground">誰とトークする？</h2>
-          </main>
+              <h2 className="text-xl text-muted-foreground">
+                誰とトークする？
+              </h2>
+            </main>
           )}
-          
         </main>
       </div>
     </div>
