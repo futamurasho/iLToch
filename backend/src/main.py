@@ -2,7 +2,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from gmail_controllers.gmail_sender import send_email
-from api import emails, friends
+from api import emails, friends,groups
 import uvicorn
 import asyncio
 from gmail_controllers.gmail_worker import fetch_and_store_for_all_users
@@ -20,6 +20,7 @@ app.add_middleware(
 )
 app.include_router(emails.router, prefix="/api", tags=["email"])
 app.include_router(friends.router, prefix="/api", tags=["friend"])
+app.include_router(groups.router, prefix="/api", tags=["group"])
 
 # メール送信用のリクエスト形式
 class EmailRequest(BaseModel):

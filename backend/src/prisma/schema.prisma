@@ -20,6 +20,7 @@ model User {
   createdAt     DateTime @default(now())              // 登録日時
   emails        Email[] 
   friend        Friend[]
+  groups        Group[]
 
   @@map("users")
 }
@@ -56,8 +57,32 @@ model Friend {
   customLabel    String?                                       // ユーザ独自ラベル
 
   user        User   @relation(fields: [userId], references: [id]) //外部キーリレーション
-
+  groups      FriendGroup[]                                    //所属グループ
 
   @@map("friends") 
   @@unique([userId, emailAddress])  
+}
+
+model Group {
+  id          String         @id @default(cuid())              // グループID
+  name        String                                           // グループ名
+  userId      String                                           // 作成ユーザー（オーナー）
+  createdAt   DateTime        @default(now())                  // 作成日時
+
+  user        User           @relation(fields: [userId], references: [id])
+  members     FriendGroup[]                                   // 中間テーブル経由でFriendと接続
+
+  @@map("groups")
+}
+
+model FriendGroup {
+  id        String   @id @default(cuid())          // 中間ID
+  groupId   String                                // グループID
+  friendId  String                                // フレンドID
+
+  group     Group    @relation(fields: [groupId], references: [id])
+  friend    Friend   @relation(fields: [friendId], references: [id])
+
+  @@unique([groupId, friendId])                   // 重複登録を防止
+  @@map("friend_groups")
 }

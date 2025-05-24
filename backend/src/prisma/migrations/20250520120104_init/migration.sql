@@ -36,7 +36,30 @@ CREATE TABLE "friends" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "customLabel" TEXT,
     CONSTRAINT "friends_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);  
+
+-- CreateTable
+CREATE TABLE "groups" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "groups_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+-- CreateTable
+CREATE TABLE "friend_groups" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "groupId" TEXT NOT NULL,
+    "friendId" TEXT NOT NULL,
+    CONSTRAINT "friend_groups_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "groups" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "friend_groups_friendId_fkey" FOREIGN KEY ("friendId") REFERENCES "friends" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "friend_groups_groupId_friendId_key" ON "friend_groups"("groupId", "friendId");
+
+
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
