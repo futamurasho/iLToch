@@ -48,14 +48,25 @@ export default function ChatScreen() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null)
   const sortedFriends = [...filteredFriends].sort((a, b) => {
-  const aUnread = emails.filter(
-    (email) => email.senderAddress === a.emailAddress && !email.isRead
-  ).length;
-  const bUnread = emails.filter(
-    (email) => email.senderAddress === b.emailAddress && !email.isRead
-  ).length;
-  return bUnread - aUnread;
-});
+  const getEmailsForUser = (user: FriendsType) =>
+    emails.filter(
+      (email) =>
+        email.senderAddress === user.emailAddress || email.receiverAddress === user.emailAddress
+    );
+  const aEmails = getEmailsForUser(a);
+  const bEmails = getEmailsForUser(b);
+  const aHasUnread = aEmails.some((email) => !email.isRead);
+  const bHasUnread = bEmails.some((email) => !email.isRead);
+  const getLatestTimestamp = (emails: typeof aEmails) =>
+    emails.length > 0
+      ? Math.max(...emails.map((email) => new Date(email.createdAt).getTime()))
+      : 0;
+  const aLatest = getLatestTimestamp(aEmails);
+  const bLatest = getLatestTimestamp(bEmails);
+  if (aHasUnread !== bHasUnread) return bHasUnread ? 1 : -1;
+  return bLatest - aLatest;
+  });
+
 
   useEffect(() => {
     //ここで、DBにすでに登録されているユーザかどうかで処理が変わる
@@ -231,7 +242,9 @@ export default function ChatScreen() {
                 {/* {filteredEmails
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
                   .map((email) => ( */}
-                  {filteredEmails.map((email, index) => {
+                  {filteredEmails
+                  .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                  .map((email, index) => {
                     const currentDate = email.receivedAt
                     ? new Date(email.receivedAt).toLocaleDateString()
                     : "";
