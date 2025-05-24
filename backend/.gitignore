@@ -7,4 +7,6 @@ node_modules
 src/prisma/dev.db
 src/prisma/dev.db-journal
 # Prisma 自動生成クライアント
-src/generated/prisma/
+src/src/generated/prisma/
+
+.env
