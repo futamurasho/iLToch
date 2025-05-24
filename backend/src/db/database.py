@@ -85,7 +85,7 @@ def get_emails_by_email(email: str) -> List[Dict]:
     cursor = conn.cursor()
     cursor.execute("""
         SELECT id, gmailMessageId, subject, senderAddress, receiverAddress,
-               content, snippet, receivedAt, isRead, isNotified, customLabel, createdAt
+               content,html_content, snippet, receivedAt, isRead, isNotified, customLabel, createdAt
         FROM emails
         WHERE receiverAddress = ?
         ORDER BY receivedAt DESC
@@ -102,12 +102,13 @@ def get_emails_by_email(email: str) -> List[Dict]:
             "senderAddress": row[3],
             "receiverAddress": row[4],
             "content": row[5],
-            "snippet": row[6],
-            "receivedAt": row[7],
-            "isRead": bool(row[8]),
-            "isNotified": bool(row[9]),
-            "customLabel": row[10],
-            "createdAt": row[11],
+            "html_content":row[6],
+            "snippet": row[7],
+            "receivedAt": row[8],
+            "isRead": bool(row[9]),
+            "isNotified": bool(row[10]),
+            "customLabel": row[11],
+            "createdAt": row[12],
         })
     return emails
 
@@ -148,10 +149,10 @@ def post_email_to_db(email: Email)-> None:
         cursor = conn.cursor()
         cursor.execute("""
                        INSERT OR IGNORE INTO emails (
-                       id, userId, gmailMessageId, subject, senderAddress,receiverAddress, content, snippet,
+                       id, userId, gmailMessageId, subject, senderAddress,receiverAddress, content,html_content, snippet,
                        receivedAt, isRead, isNotified, customLabel
                        )
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?)
                     """, (
                         email.id,
                         email.userId,
@@ -160,6 +161,7 @@ def post_email_to_db(email: Email)-> None:
                         email.senderAddress,
                         email.receiverAddress,
                         email.content,
+                        email.html_content,
                         email.snippet,
                         email.receivedAt,
                         int(email.isRead),
@@ -205,12 +207,14 @@ def post_friend_to_db(friend: Friend) -> None:
         print("post_friend_to_db clear")
 
 #フレンド取得
-def get_friend_from_db() -> List[Friend]:
+def get_friend_from_db(userId:str) -> List[Friend]:
+    print(userId)
 
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT id, userId, emailAddress, name, createdAt, customLabel FROM friends"
+        "SELECT id, userId, emailAddress, name, createdAt, customLabel FROM friends  WHERE userId = ?",
+        (userId,)
     )
     rows = cursor.fetchall()
     conn.close()
