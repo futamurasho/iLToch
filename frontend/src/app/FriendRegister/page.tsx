@@ -19,6 +19,7 @@ import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import type { FriendsType } from "@/type/FriendsType";
+import GenericSearch from "@/components/GenericSearch";
 
 const formSchema = z.object({
   email: z
@@ -33,12 +34,26 @@ export default function FriendRegister() {
   const { data: session, status } = useSession();
   const [editingId, setEditingId] = useState("");
   const [inputValue, setInputValue] = useState("");
-
+  const [filteredFriends, setFilteredFriends] = useState<FriendsType[]>([]);
   const handleDoubleClick = (friend: FriendsType) => {
     console.log("dobleclick");
     console.log(friend.id);
     setEditingId(friend.id);
     setInputValue(friend.name || "");
+  };
+  // グループ作成に利用
+  const [selectedFriends, setSelectedFriends] = useState<FriendsType[]>([]);
+  const [isOver, setIsOver] = useState(false);
+  const [groupName, setGroupName] = useState("");
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const friendId = e.dataTransfer.getData("friendId");
+    const friend = friends.find((f) => f.id === friendId);
+    if (friend && !selectedFriends.some((f) => f.id === friend.id)) {
+      setSelectedFriends([...selectedFriends, friend]);
+    }
+    setIsOver(false);
   };
 
   useEffect(() => {
@@ -168,54 +183,134 @@ export default function FriendRegister() {
           {message.text}
         </p>
       )}
-      <div className="h-full border-r p-4 overflow-hidden flex flex-col">
-        <Card className="flex flex-col flex-1 overflow-hidden">
-          <CardHeader className="border-b">
-            <CardTitle>メールフレンド一覧</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full ">
-              {Array.isArray(friends) ? (
-                friends.map((friend) => (
-                  <div
-                    key={friend.id}
-                    className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg"
-                    onDoubleClick={() => handleDoubleClick(friend)}
-                  >
-                    {editingId == friend.id ? (
-                      <Input
-                        placeholder={friend.name}
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        onBlur={() => handleBlur(friend)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault(); // 改行防止（必要に応じて）
-                            handleBlur(friend);
-                          }
+      <div className="flex-1 flex h-full overflow-hidden">
+        <div className="w-1/2 h-full border-r p-4 overflow-hidden flex flex-col">
+          <Card className="flex flex-col flex-1 overflow-hidden">
+            <CardHeader className="border-b">
+              <CardTitle>メールフレンド一覧</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-hidden flex flex-col">
+              <GenericSearch
+                originalList={friends}
+                onFilter={setFilteredFriends}
+                searchKey="name"
+                placeholder="フレンドを検索"
+              />
+              <div className="flex-1 overflow-hidden">
+                <ScrollArea className="h-full ">
+                  {Array.isArray(filteredFriends) &&
+                  filteredFriends.length > 0 ? (
+                    friends.map((friend) => (
+                      <div
+                        key={friend.id}
+                        className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg"
+                        onDoubleClick={() => handleDoubleClick(friend)}
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData("friendId", friend.id);
                         }}
-                        autoFocus
-                      />
-                    ) : friend.name ? (
-                      <div className="flex flex-col">
-                        <span>{friend.name}</span>
-                        <span className="text-sm text-gray-500">
-                          {friend.emailAddress}
-                        </span>
+                      >
+                        {editingId == friend.id ? (
+                          <Input
+                            placeholder={friend.name}
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onBlur={() => handleBlur(friend)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault(); // 改行防止（必要に応じて）
+                                handleBlur(friend);
+                              }
+                            }}
+                            autoFocus
+                          />
+                        ) : friend.name ? (
+                          <div className="flex flex-col">
+                            <span>{friend.name}</span>
+                            <span className="text-sm text-gray-500">
+                              {friend.emailAddress}
+                            </span>
+                          </div>
+                        ) : (
+                          friend.emailAddress
+                        )}
                       </div>
-                    ) : (
-                      friend.emailAddress
-                    )}
-                  </div>
-                ))
-              ) : (
-                <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
-                  Loading....
-                </div>
-              )}
-            </ScrollArea>
-          </CardContent>
-        </Card>
+                    ))
+                  ) : status == "authenticated" ? (
+                    <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
+                      No friends...
+                    </div>
+                  ) : (
+                    <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
+                      Loading....
+                    </div>
+                  )}
+                </ScrollArea>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="flex-1 h-full p-4">
+          <Card
+            className={` h-full   p-4 transition-all ${
+              isOver ? "bg-gray-200 border-dashed" : "bg-white"
+            }`}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={handleDrop}
+            onDragEnter={() => setIsOver(true)}
+            onDragLeave={() => setIsOver(false)}
+          >
+            <h2 className="font-bold mb-2">グループ作成ボックス</h2>
+
+            {selectedFriends.length === 0 && (
+              <p className="text-center  text-gray-400">
+                ここにドロップしてグループ作成
+              </p>
+            )}
+
+            <ul>
+              {selectedFriends.map((f) => (
+                <li key={f.id} className="p-1 flex justify-between border-b">
+                  <span>{f.name}</span>
+                  <button
+                    className="text-red-500 text-sm hover:underline"
+                    onClick={() => {
+                      setSelectedFriends((prev) =>
+                        prev.filter((friend) => friend.id !== f.id)
+                      );
+                    }}
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            {selectedFriends.length > 0 && (
+              <div className="mt-4 flex">
+                <Input
+                  className="border px-2 py-1 rounded mr-2"
+                  placeholder="グループ名を入力"
+                  value={groupName}
+                  onChange={(e) => setGroupName(e.target.value)}
+                />
+                <Button
+                  className=" text-white px-3 py-1 rounded"
+                  variant="default"
+                  onClick={() => {
+                    if (groupName) {
+                      alert(`「${groupName}」というグループを作成しました！`);
+                      setSelectedFriends([]);
+                      setGroupName("");
+                    }
+                  }}
+                >
+                  作成
+                </Button>
+              </div>
+            )}
+          </Card>
+        </div>
       </div>
     </div>
   );
