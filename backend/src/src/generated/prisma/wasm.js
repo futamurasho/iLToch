@@ -134,6 +134,7 @@ exports.Prisma.EmailScalarFieldEnum = {
   senderAddress: 'senderAddress',
   receiverAddress: 'receiverAddress',
   content: 'content',
+  html_content: 'html_content',
   snippet: 'snippet',
   receivedAt: 'receivedAt',
   isRead: 'isRead',

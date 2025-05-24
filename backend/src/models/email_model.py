@@ -10,6 +10,7 @@ class EmailCreate(BaseModel):
     senderAddress: str  
     receiverAddress:str
     content: str
+    html_content: str
     gmailMessageId: str
     receivedAt: Optional[datetime]
     subject: Optional[str]
