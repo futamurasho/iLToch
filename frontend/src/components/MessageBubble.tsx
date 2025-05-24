@@ -92,7 +92,13 @@ export default function MessageBubble({
               toast.custom((t: Toast) => {
                 function ToastContent() {
                   const toastRef = useRef<HTMLDivElement>(null);
-
+                  useEffect(() => {
+                   if (email.senderAddress !== session?.user?.email && !email.isRead) {
+                   const newEmail = { ...email, isRead: true };
+                   patchReadHandler(newEmail);
+                   }
+                  }, []);
+                  
                   useEffect(() => {
                     const handleClickOutside = (event: MouseEvent) => {
                       if (
