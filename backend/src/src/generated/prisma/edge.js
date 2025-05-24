@@ -158,16 +158,32 @@ const config = {
       fromEnvVar: null,
       value: "prisma-client-js",
     },
+<<<<<<< HEAD
+    "output": {
+      "value": "C:\\Users\\NOTE32\\Downloads\\chatapp\\iLToch\\backend\\src\\src\\generated\\prisma",
+      "fromEnvVar": null
+=======
     output: {
       value:
         "/Users/futamurasho/git_project/iLToch/backend/src/src/generated/prisma",
       fromEnvVar: null,
+>>>>>>> main
     },
     config: {
       engineType: "library",
     },
     binaryTargets: [
       {
+<<<<<<< HEAD
+        "fromEnvVar": null,
+        "value": "windows",
+        "native": true
+      }
+    ],
+    "previewFeatures": [],
+    "sourceFilePath": "C:\\Users\\NOTE32\\Downloads\\chatapp\\iLToch\\backend\\src\\prisma\\schema.prisma",
+    "isCustomOutput": true
+=======
         fromEnvVar: null,
         value: "darwin",
         native: true,
@@ -177,6 +193,7 @@ const config = {
     sourceFilePath:
       "/Users/futamurasho/git_project/iLToch/backend/src/prisma/schema.prisma",
     isCustomOutput: true,
+>>>>>>> main
   },
   relativeEnvPaths: {
     rootEnvPath: null,
