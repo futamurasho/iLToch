@@ -24,7 +24,10 @@ export default function GenericSearch<T>({
       return value.includes(query.toLowerCase());
     });
     onFilter(filtered);
+    console.log("フィルターされたのは", filtered)
   }, [query, originalList, onFilter, searchKey]);
+
+  console.log("オリジナルリストは",originalList)
 
   return (
     <Input

@@ -89,9 +89,9 @@ def get_emails_by_email(email: str) -> List[Dict]:
         SELECT id, gmailMessageId, subject, senderAddress, receiverAddress,
                content,html_content, snippet, receivedAt, isRead, isNotified, customLabel, createdAt
         FROM emails
-        WHERE receiverAddress = ?
+        WHERE receiverAddress = ? OR senderAddress == ?
         ORDER BY receivedAt DESC
-    """, (email,))
+    """, (email, email,))
     rows = cursor.fetchall()
     conn.close()
 
