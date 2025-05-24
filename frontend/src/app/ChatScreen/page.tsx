@@ -57,15 +57,26 @@ export default function ChatScreen() {
   const bEmails = getEmailsForUser(b);
   const aHasUnread = aEmails.some((email) => !email.isRead);
   const bHasUnread = bEmails.some((email) => !email.isRead);
-  const getLatestTimestamp = (emails: typeof aEmails) =>
+  const getLatestTimestamp = (emails: EmailType[]) =>
     emails.length > 0
-      ? Math.max(...emails.map((email) => new Date(email.createdAt).getTime()))
+      ? Math.max(
+          ...emails.map((email) =>
+            email.receivedAt
+              ? new Date(email.receivedAt).getTime()
+              : new Date(email.createdAt).getTime()
+          )
+        )
       : 0;
   const aLatest = getLatestTimestamp(aEmails);
   const bLatest = getLatestTimestamp(bEmails);
+
+  // 未読があるかどうかで優先順位を決定（未読ありを優先）
   if (aHasUnread !== bHasUnread) return bHasUnread ? 1 : -1;
+
+  // 未読状態が同じなら、最新メールの日付が新しい順にソート
   return bLatest - aLatest;
-  });
+});
+
 
 
   useEffect(() => {
@@ -243,7 +254,7 @@ export default function ChatScreen() {
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
                   .map((email) => ( */}
                   {filteredEmails
-                  .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                  .sort((a, b) => new Date(a.receivedAt!).getTime() - new Date(b.receivedAt!).getTime())
                   .map((email, index) => {
                     const currentDate = email.receivedAt
                     ? new Date(email.receivedAt).toLocaleDateString()
