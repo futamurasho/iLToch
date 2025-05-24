@@ -261,3 +261,5 @@ def patch_email_to_isread(email_id: str ):
     finally:
         conn.close()
     return {"message": "Email isRead updated successfully"}
+
+def post_group_to_db()
