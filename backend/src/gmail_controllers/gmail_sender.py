@@ -44,7 +44,7 @@ def send_email(to, subject, body_text,access_token, user):
     encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
     create_message = {"raw": encoded_message}
 
-    send_message = service.users().messages().send(userId="me", body=create_message).execute()
+    send_message = service.users().messages().send(userId=user["id"], body=create_message).execute()
     print(f"Message sent. ID: {send_message['id']}")
     gmail_message_id = send_message["id"]
     now = datetime.now()
@@ -52,10 +52,11 @@ def send_email(to, subject, body_text,access_token, user):
     print(user)
     email = Email(
         id=str(uuid.uuid4()),
-        userId="me",  #本当はsession user
+        userId=user["id"],  #本当はsession user
         senderAddress=user["email"], #本当はsession userのmailaddress
         receiverAddress=to,  # GmailのFromアドレスを取得する場合は別途取得可能
         content=body_text,
+        html_content=body_text,
         gmailMessageId=gmail_message_id,
         receivedAt=now,
         subject=subject,
