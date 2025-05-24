@@ -33,7 +33,6 @@ const UserList: UserListType[] = [
 ];
 
 export default function ChatScreen() {
-  const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList);
   const [emails, setEmails] = useState<EmailType[]>([]);
   const [filteredEmails, setFilteredEmails] = useState<EmailType[]>([]);
   const [selectUser, setSelectUser] = useState<FriendsType>({
@@ -48,6 +47,15 @@ export default function ChatScreen() {
   const { data: session, status } = useSession();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null)
+  const sortedFriends = [...filteredFriends].sort((a, b) => {
+  const aUnread = emails.filter(
+    (email) => email.senderAddress === a.emailAddress && !email.isRead
+  ).length;
+  const bUnread = emails.filter(
+    (email) => email.senderAddress === b.emailAddress && !email.isRead
+  ).length;
+  return bUnread - aUnread;
+});
 
   useEffect(() => {
     //ここで、DBにすでに登録されているユーザかどうかで処理が変わる
@@ -58,7 +66,7 @@ export default function ChatScreen() {
       // const res = await fetch("http://localhost:8080/api/email");
       // console.log(res.status);
       // const data = await res.json();
-      
+
       console.log("fetchできました!");
       console.log(session);
       if (session?.accessToken) {
@@ -78,15 +86,14 @@ export default function ChatScreen() {
         const data = await res.json();
         console.log("メール取得結果: ", data);
         setEmails(data.emails);
-      // setFilteredEmails(data.emails); // 検索対象の初期値
+        // setFilteredEmails(data.emails); // 検索対象の初期値
         if (data.friends) {
           setFriends(data.friends);
           console.log("セットフレンドは呼ばれた");
         }
       }
     };
-    if(status === "loading") {
-      
+    if (status === "loading") {
     }
     if (status === "authenticated") {
       fetchEmails();
@@ -103,36 +110,35 @@ export default function ChatScreen() {
   //   fetchFriend();
   //   console.log("friend頂き");
   // }, []);
-useEffect(() => {
-  const fetchFriend = async () => {
-    try {
-      const res = await fetch("http://localhost:8080/api/friend");
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      const data = await res.json();
-      setFriends(data);
-      setFilteredFriends(data);
-    } catch (error) {
-      console.error("友達リストの取得に失敗しました", error);
-      setFriends([]);
-      setFilteredFriends([]);
-    }
-  };
-  fetchFriend();
-  console.log("friend頂き");
-}, []);
+  // useEffect(() => {
+  //   const fetchFriend = async () => {
+  //     try {
+  //       const res = await fetch("http://localhost:8080/api/friend");
+  //       if (!res.ok) {
+  //         throw new Error(`HTTP error! status: ${res.status}`);
+  //       }
+  //       const data = await res.json();
+  //       setFriends(data);
+  //       setFilteredFriends(data);
+  //     } catch (error) {
+  //       console.error("友達リストの取得に失敗しました", error);
+  //       setFriends([]);
+  //       setFilteredFriends([]);
+  //     }
+  //   };
+  //   fetchFriend();
+  //   console.log("friend頂き");
+  // }, []);
 
-useEffect(() => {
-  if (!selectUser?.emailAddress) return;
-  const relatedEmails = emails.filter(
-    (email) =>
-      email.senderAddress === selectUser.emailAddress ||
-      email.receiverAddress === selectUser.emailAddress
-  );
-  setFilteredEmails(relatedEmails);
-}, [selectUser, emails]);
-
+  useEffect(() => {
+    if (!selectUser?.emailAddress) return;
+    const relatedEmails = emails.filter(
+      (email) =>
+        email.senderAddress === selectUser.emailAddress ||
+        email.receiverAddress === selectUser.emailAddress
+    );
+    setFilteredEmails(relatedEmails);
+  }, [selectUser, emails]);
 
   const readHandler = (newEmail: EmailType) => {
     const newEmails = emails.map((email) =>
@@ -167,30 +173,34 @@ useEffect(() => {
               />
               <div className="flex-1 overflow-hidden">
               <ScrollArea className="h-full ">
-                {Array.isArray(filteredFriends)&& filteredFriends.length > 0?
-                  (filteredFriends.map((user) => {
+                {Array.isArray(filteredFriends) &&
+                filteredFriends.length > 0 ? (
+                  sortedFriends.map((user) => {
                     const unreadCount = emails.filter(
                       (email) =>
-                        email.senderAddress === user.emailAddress && email.isRead === false
+                        email.senderAddress === user.emailAddress &&
+                        email.isRead === false
                     ).length;
 
-                  
-                    return(
-                    
-                    <div
-                      key={user.id}
-                      className="flex justify-between border-b hover:bg-gray-100 cursor-pointer "
-                      onClick={() => {
-                        setSelectUser(user);
-                      }}
-                    >
-                      <div className="p-2 text-lg">
-                        {user.name ? user.name : user.emailAddress}
+                    return (
+                      <div
+                        key={user.id}
+                        className="flex justify-between border-b hover:bg-gray-100 cursor-pointer "
+                        onClick={() => {
+                          setSelectUser(user);
+                        }}
+                      >
+                        <div className="p-2 text-lg">
+                          {user.name ? user.name : user.emailAddress}
+                        </div>
+                        {unreadCount > 0 && (
+                          <div className="p-2 mr-4 mt-1 rounded-full bg-red-500 text-white w-8 h-8 flex items-center justify-center">
+                            {unreadCount}
+                          </div>
+                        )}
                       </div>
-                      {unreadCount > 0 &&
-                      <div className="p-2 mr-4 mt-1 rounded-full bg-red-500 text-white w-8 h-8 flex items-center justify-center">{unreadCount}</div>}
-                    </div>
-                  )})
+                    );
+                  })
                 ) : (
                   <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
                     Loading....
