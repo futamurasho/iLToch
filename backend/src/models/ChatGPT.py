@@ -4,3 +4,4 @@ import sqlite3
 
 class ChatMessage(BaseModel):
     message: str
+    name: str

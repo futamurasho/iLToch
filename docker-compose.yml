@@ -8,6 +8,7 @@ services:
       - "8080:8080"
     volumes:
       - ./backend/src:/workspace/backend/src
+      - ./backend/.env:/workspace/backend/.env  # ← 追加
 
   frontend:
     build:

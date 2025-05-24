@@ -12,7 +12,8 @@ import MessageBubble from "@/components/MessageBubble";
 import { UserListType } from "@/type/UserListType";
 import { EmailType } from "@/type/EmailType";
 import { FriendsType } from "@/type/FriendsType";
-import { Divide } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 
 const UserList: UserListType[] = [
   {
@@ -57,6 +58,7 @@ export default function ChatScreen() {
   ).length;
   return bUnread - aUnread;
 });
+  const router = useRouter()
 
   useEffect(() => {
     //ここで、DBにすでに登録されているユーザかどうかで処理が変わる
@@ -202,6 +204,10 @@ export default function ChatScreen() {
                       </div>
                     );
                   })
+                ) :  status == "authenticated" ? (
+                  <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
+                    No friends...
+                  </div>
                 ) : (
                   <div className="p-2 border-b hover:bg-gray-100 cursor-pointer text-lg">
                     Loading....
@@ -260,30 +266,22 @@ export default function ChatScreen() {
             <form
               onSubmit={async (e) => {
                 e.preventDefault(); // ← これを最初に書いておくと安全
-                const formData = new FormData(e.currentTarget);
+                const form = e.currentTarget; 
+                const formData = new FormData(form);
                 const email = formData.get("email") as string;
                 console.log(email)
 
                 if (email.trim() === "")  return
 
-                const res = await fetch("http://localhost:8080/api/rewrite-email", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({message:email})
-                })
-
-                if (!res.ok) {
-                  console.error("添削失敗");
-                  return;
+               
+                sessionStorage.setItem("email", email);
+                sessionStorage.setItem("emailAddress", selectUser.emailAddress);
+                if (selectUser.name){
+                  sessionStorage.setItem("name", selectUser.name)
                 }
-            
-                const data = await res.json(); // { subject: string, body: string }
-                const { subject, body } = data;
-                console.log(subject, body)
-                
-                e.currentTarget.reset()
+                else sessionStorage.setItem("name", selectUser.emailAddress)
+                form.reset()
+                router.push("/MailSend")
               }}
             >
               <div className="flex pr-2 pl-2">

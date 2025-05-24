@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function App() {
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const { data: session } = useSession(); // ← 追加
-  const user = session?.user
+  const user = session?.user;
+  const router = useRouter()
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const accessToken = session?.accessToken;
@@ -26,8 +28,40 @@ function App() {
       body: JSON.stringify({ to, subject, body, accessToken, user }),
     });
 
-    console.log("送信！", { to, subject, body, accessToken, user});
+    console.log("送信！", { to, subject, body, accessToken, user });
   };
+  useEffect(() => {
+    const chatGPTHandler = async (email: string, name:string) => {
+      const res = await fetch("http://localhost:8080/api/rewrite-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: email, name }),
+      });
+
+      if (!res.ok) {
+        console.error("添削失敗");
+        return;
+      }
+
+      const data = await res.json(); // { subject: string, body: string }
+      const { subject, body } = data;
+      console.log(subject, body);
+
+      setSubject(subject);
+      setBody(body);
+    };
+
+    const email = sessionStorage.getItem("email") || "";
+    const emailAddress = sessionStorage.getItem("emailAddress") || "";
+    const name = sessionStorage.getItem("name") || "";
+    console.log(email);
+    console.log(emailAddress);
+    setTo(emailAddress);
+    chatGPTHandler(email, name);
+    // stateにセットするなど
+  }, []);
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-md">
@@ -72,7 +106,7 @@ function App() {
         <button
           type="submit"
           className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
-        >
+          onClick={() => router.push("/ChatScreen")}>
           送信
         </button>
       </form>

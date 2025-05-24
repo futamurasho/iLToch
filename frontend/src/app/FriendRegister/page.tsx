@@ -72,7 +72,7 @@ export default function FriendRegister() {
     if (status === "authenticated") {
       fetchEmails();
     }
-  }, [session, status]);
+  }, [session, status, message]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

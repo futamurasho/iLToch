@@ -18,8 +18,8 @@ def send_emails_to_db(email: Email):
     try:
         cursor.execute(
             """
-            INSERT INTO emails (id, userId, senderAddress, receiverAddress, content, gmailMessageId, receivedAt, subject, snippet, isRead, isNotified, createdAt, customLabel)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO emails (id, userId, senderAddress, receiverAddress, content, html_content, gmailMessageId, receivedAt, subject, snippet, isRead, isNotified, createdAt, customLabel)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """ ,
             (
                 email.id,
@@ -27,6 +27,7 @@ def send_emails_to_db(email: Email):
                 email.senderAddress,
                 email.receiverAddress,
                 email.content,
+                email.html_content,
                 email.gmailMessageId,
                 email.receivedAt.strftime('%Y-%m-%d %H:%M:%S'),
                 email.subject,
@@ -39,6 +40,7 @@ def send_emails_to_db(email: Email):
         )
         conn.commit()
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=f"登録に失敗しました: {str(e)}")
     finally:
         conn.close()
