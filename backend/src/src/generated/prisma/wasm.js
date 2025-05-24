@@ -152,6 +152,19 @@ exports.Prisma.FriendScalarFieldEnum = {
   customLabel: 'customLabel'
 };
 
+exports.Prisma.GroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FriendGroupScalarFieldEnum = {
+  id: 'id',
+  groupId: 'groupId',
+  friendId: 'friendId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -166,7 +179,9 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   Email: 'Email',
-  Friend: 'Friend'
+  Friend: 'Friend',
+  Group: 'Group',
+  FriendGroup: 'FriendGroup'
 };
 
 /**
