@@ -5,15 +5,19 @@ import { toast, type Toast } from "sonner";
 import type { EmailType } from "@/type/EmailType";
 
 type MessageBubbleProps = {
-  scrollAreaRef: RefObject<HTMLDivElement>;
+  scrollAreaRef: RefObject<HTMLDivElement | null>;
   email: EmailType;
   readHandler: (x: EmailType) => void;
+  showDate: boolean | string;
+  currentDate: string
 };
 
 export default function MessageBubble({
   scrollAreaRef,
   email,
   readHandler,
+  showDate,
+  currentDate,
 }: MessageBubbleProps) {
   const { data: session } = useSession();
   const [scrollAreaRect, setScrollAreaRect] = useState<DOMRect | null>(null);
@@ -23,7 +27,11 @@ export default function MessageBubble({
       setScrollAreaRect(scrollAreaRef.current.getBoundingClientRect());
     }
   }, [scrollAreaRef]);
-  const formatTime = (datetime: string) => {
+
+  const formatTime = (datetime: string | undefined) => {
+    if (!datetime){
+      return
+    }
     const date = new Date(datetime.replace(" ", "T"));
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
@@ -43,6 +51,14 @@ export default function MessageBubble({
       readHandler(newEmail);
   }
   return (
+    <div>
+    {showDate && (
+      <div className="flex justify-center my-4">
+        <div className="bg-gray-200 text-gray-700 text-sm px-4 py-1 rounded-full">
+          {currentDate}
+        </div>
+      </div>
+    )}
     <div
       className={cn(
         "flex  w-full",
@@ -122,10 +138,11 @@ export default function MessageBubble({
           )}
 
           <div className="text-xs text-gray-500">
-            {formatTime(email.createdAt)}
+            {formatTime(email.receivedAt)}
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

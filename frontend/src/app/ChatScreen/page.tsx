@@ -1,7 +1,7 @@
 "use client";
 // import FriendSearch from "@/components/FriendSearch";
 import GenericSearch from "@/components/GenericSearch";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { useSession } from "next-auth/react";
 import { Card, CardTitle, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -33,7 +33,6 @@ const UserList: UserListType[] = [
 ];
 
 export default function ChatScreen() {
-  const [filteredUsers, setFilteredUsers] = useState<UserListType[]>(UserList);
   const [emails, setEmails] = useState<EmailType[]>([]);
   const [filteredEmails, setFilteredEmails] = useState<EmailType[]>([]);
   const [selectUser, setSelectUser] = useState<FriendsType>({
@@ -47,6 +46,16 @@ export default function ChatScreen() {
   //status内にはloading,authenticated,unauthenticatedの状態を持つ、つまり、ログイン状態かそうでないか
   const { data: session, status } = useSession();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const sortedFriends = [...filteredFriends].sort((a, b) => {
+  const aUnread = emails.filter(
+    (email) => email.senderAddress === a.emailAddress && !email.isRead
+  ).length;
+  const bUnread = emails.filter(
+    (email) => email.senderAddress === b.emailAddress && !email.isRead
+  ).length;
+  return bUnread - aUnread;
+});
 
   useEffect(() => {
     //ここで、DBにすでに登録されているユーザかどうかで処理が変わる
@@ -138,6 +147,12 @@ export default function ChatScreen() {
 
     setEmails(newEmails);
   };
+  useLayoutEffect(() => {
+    if(scrollRef.current){
+      scrollRef?.current?.scrollIntoView() 
+    }
+  }, [filteredEmails]
+  )
 
   return (
     <div className="flex flex-col h-screen">
@@ -148,17 +163,19 @@ export default function ChatScreen() {
             <CardHeader className="border-b">
               <CardTitle>メールフレンド一覧</CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 overflow-hidden">
+            <CardContent className="flex-1 overflow-hidden flex flex-col">
+
               <GenericSearch
                 originalList={friends}
                 onFilter={setFilteredFriends}
                 searchKey="name"
                 placeholder="フレンドを検索"
               />
+              <div className="flex-1 overflow-hidden">
               <ScrollArea className="h-full ">
                 {Array.isArray(filteredFriends) &&
                 filteredFriends.length > 0 ? (
-                  filteredFriends.map((user) => {
+                  sortedFriends.map((user) => {
                     const unreadCount = emails.filter(
                       (email) =>
                         email.senderAddress === user.emailAddress &&
@@ -190,6 +207,7 @@ export default function ChatScreen() {
                   </div>
                 )}
               </ScrollArea>
+              </div>
             </CardContent>
           </Card>
         </aside>
@@ -201,26 +219,41 @@ export default function ChatScreen() {
                 からのメール
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 overflow-hidden">
+            <CardContent className="flex-1 overflow-hidden flex flex-col">
               <GenericSearch
                 originalList={emails}
                 onFilter={setFilteredEmails}
                 searchKey="content"
                 placeholder="メッセージを検索"
               />
+              <div className="flex-1 overflow-hidden">
               <ScrollArea ref={scrollAreaRef} className="h-full">
                 {/* {filteredEmails
                   .filter((email) => email.senderAddress === selectUser.emailAddress)
                   .map((email) => ( */}
-                {filteredEmails.map((email) => (
-                  <MessageBubble
-                    scrollAreaRef={scrollAreaRef}
-                    key={email.id}
-                    email={email}
-                    readHandler={readHandler}
-                  />
-                ))}
+                  {filteredEmails.map((email, index) => {
+                    const currentDate = email.receivedAt
+                    ? new Date(email.receivedAt).toLocaleDateString()
+                    : "";
+                    const prevReceivedAt = index > 0 ? filteredEmails[index - 1].receivedAt : undefined;
+                    const prevDate = prevReceivedAt
+                      ? new Date(prevReceivedAt).toLocaleDateString()
+                      : "";
+                    const showDate = currentDate && currentDate != prevDate
+                    
+                  return(
+                    <MessageBubble
+                      scrollAreaRef={scrollAreaRef}
+                      key={email.id}
+                      email={email}
+                      readHandler={readHandler}
+                      showDate={showDate}
+                      currentDate={currentDate}
+                    />
+                  )})}
+                <div  ref={scrollRef}></div>
               </ScrollArea>
+              </div>
             </CardContent>
             <form
               onSubmit={(e) => {
