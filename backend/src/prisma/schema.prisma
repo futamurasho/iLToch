@@ -20,6 +20,7 @@ model User {
   createdAt     DateTime @default(now())              // 登録日時
   emails        Email[] 
   friend        Friend[]
+  groups        Group[]
 
   @@map("users")
 }

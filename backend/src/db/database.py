@@ -7,7 +7,7 @@ import os
 from fastapi import HTTPException
 from datetime import datetime
 from typing import Dict
-
+import uuid
 
 
 DB_PATH = "prisma/dev.db"
@@ -264,4 +264,48 @@ def patch_email_to_isread(email_id: str ):
         conn.close()
     return {"message": "Email isRead updated successfully"}
 
-def post_group_to_db()
+#グループ作成
+def post_group_to_db(user_id: str, group_name: str, friend_ids: list[str]) -> str:
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    group_id = str(uuid.uuid4())  # Prismaのcuid相当
+
+    try:
+        # Groupテーブルに登録
+        cursor.execute(
+            """
+            INSERT INTO groups (id, name, userId, createdAt)
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                group_id,
+                group_name,
+                user_id,
+                datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            )
+        )
+
+        # FriendGroupテーブルに登録（複数行）
+        for friend_id in friend_ids:
+            friend_group_id = str(uuid.uuid4())
+            cursor.execute(
+                """
+                INSERT INTO friend_groups (id, groupId, friendId)
+                VALUES (?, ?, ?)
+                """,
+                (
+                    friend_group_id,
+                    group_id,
+                    friend_id
+                )
+            )
+
+        conn.commit()
+        return group_id
+
+    except sqlite3.IntegrityError as e:
+        raise HTTPException(status_code=409, detail="グループまたはメンバー登録が重複しています")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"グループ作成に失敗しました: {str(e)}")
+    finally:
+        conn.close()

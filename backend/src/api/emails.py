@@ -107,6 +107,8 @@ def get_emails(req: EmailFetchRequest):
     emails = get_emails_by_email(user_email)
     friend = get_friend_from_db(req.userId)
     return {"emails": emails, "friends": friend}
+
+
 @router.patch("/emails/{email_id}")
 def patch_emails(email_id: str):
     return patch_email_to_isread(email_id)

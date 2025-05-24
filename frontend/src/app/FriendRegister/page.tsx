@@ -268,23 +268,23 @@ export default function FriendRegister() {
               </p>
             )}
             <div className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full ">  
-              {selectedFriends.map((f) => (
-                <div key={f.id} className="p-1 flex justify-between border-b">
-                  <span>{f.name}</span>
-                  <button
-                    className="text-red-500 text-sm hover:underline"
-                    onClick={() => {
-                      setSelectedFriends((prev) =>
-                        prev.filter((friend) => friend.id !== f.id)
-                      );
-                    }}
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </ScrollArea>
+              <ScrollArea className="h-full ">
+                {selectedFriends.map((f) => (
+                  <div key={f.id} className="p-1 flex justify-between border-b">
+                    <span>{f.name}</span>
+                    <button
+                      className="text-red-500 text-sm hover:underline"
+                      onClick={() => {
+                        setSelectedFriends((prev) =>
+                          prev.filter((friend) => friend.id !== f.id)
+                        );
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </ScrollArea>
             </div>
             {selectedFriends.length > 0 && (
               <div className="mt-4 flex">
@@ -297,11 +297,32 @@ export default function FriendRegister() {
                 <Button
                   className=" text-white px-3 py-1 rounded"
                   variant="default"
-                  onClick={() => {
-                    if (groupName) {
-                      alert(`「${groupName}」というグループを作成しました！`);
+                  onClick={async () => {
+                    if (!groupName || selectedFriends.length === 0) return;
+                    //グループ化のAPI呼び出し
+                    const res = await fetch("http://localhost:8080/api/group", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        userId: session?.user.id,
+                        name: groupName,
+                        friendIds: selectedFriends.map((f) => f.id),
+                      }),
+                    });
+
+                    if (res.ok) {
+                      const data = await res.json();
+                      alert(
+                        `「${groupName}」というグループを作成しました！（ID: ${data.groupId}）`
+                      );
+                      //グループリセット
                       setSelectedFriends([]);
                       setGroupName("");
+                    } else {
+                      const error = await res.json();
+                      alert("グループ作成に失敗しました: " + error.detail);
                     }
                   }}
                 >
