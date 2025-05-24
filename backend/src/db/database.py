@@ -143,31 +143,37 @@ def post_user_to_db(id: str,email:str, accessToken: str, refreshToken: str, toke
 
 #メールの保存
 def post_email_to_db(email: Email)-> None:
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT OR IGNORE INTO emails (
-            id, userId, gmailMessageId, subject, senderAddress,receiverAddress, content, snippet,
-            receivedAt, isRead, isNotified, customLabel
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        email.id,
-        email.userId,
-        email.gmailMessageId,
-        email.subject,
-        email.senderAddress,
-        email.receiverAddress,
-        email.content,
-        email.snippet,
-        email.receivedAt,
-        int(email.isRead),
-        int(email.isNotified),
-        email.customLabel
-    ))
-    conn.commit()
-    conn.close()
-    print("post_email_to_db clear")
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""
+                       INSERT OR IGNORE INTO emails (
+                       id, userId, gmailMessageId, subject, senderAddress,receiverAddress, content, snippet,
+                       receivedAt, isRead, isNotified, customLabel
+                       )
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """, (
+                        email.id,
+                        email.userId,
+                        email.gmailMessageId,
+                        email.subject,
+                        email.senderAddress,
+                        email.receiverAddress,
+                        email.content,
+                        email.snippet,
+                        email.receivedAt,
+                        int(email.isRead),
+                        int(email.isNotified),
+                        email.customLabel
+                        ))
+        conn.commit()
+        return cursor.rowcount > 0
+    except Exception as e:
+        print(f"❌ DB挿入エラー: {e}")
+        return False
+    finally:
+        conn.close()
+        print("post_email_to_db clear")
 
 #フレンドをDBに登録
 def post_friend_to_db(friend: Friend) -> None:
@@ -259,3 +265,52 @@ def patch_email_to_isread(email_id: str ):
     finally:
         conn.close()
     return {"message": "Email isRead updated successfully"}
+
+#ユーザ一覧取得
+def get_all_users():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, email, accessToken, refreshToken, tokenExpiry FROM users")
+    users = cursor.fetchall()
+    conn.close()
+
+    user_list = []
+    for row in users:
+        user_list.append({
+            "id": row[0],
+            "email": row[1],
+            "access_token": row[2],
+            "refresh_token": row[3],
+            "token_expiry": row[4]
+        })
+    return user_list
+
+#トークン更新時にDBに保存
+def update_user_token(user_id: str, access_token: str, token_expiry: datetime):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE users
+        SET accessToken = ?, tokenExpiry = ?
+        WHERE id = ?
+    """, (access_token, token_expiry.isoformat(), user_id))
+    conn.commit()
+    conn.close()
+
+#
+def patch_email_to_notified(email_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "UPDATE emails SET isNotified = true WHERE id = ?",
+            (email_id,)
+        )
+        conn.commit()
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Email not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"通知フラグ更新失敗: {str(e)}")
+    finally:
+        conn.close()
+    return {"message": "Email isNotified updated successfully"}
