@@ -47,6 +47,15 @@ export default function ChatScreen() {
   //status内にはloading,authenticated,unauthenticatedの状態を持つ、つまり、ログイン状態かそうでないか
   const { data: session, status } = useSession();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const sortedFriends = [...filteredFriends].sort((a, b) => {
+  const aUnread = emails.filter(
+    (email) => email.senderAddress === a.emailAddress && !email.isRead
+  ).length;
+  const bUnread = emails.filter(
+    (email) => email.senderAddress === b.emailAddress && !email.isRead
+  ).length;
+  return bUnread - aUnread;
+});
 
   useEffect(() => {
     //ここで、DBにすでに登録されているユーザかどうかで処理が変わる
@@ -158,7 +167,7 @@ export default function ChatScreen() {
               <ScrollArea className="h-full ">
                 {Array.isArray(filteredFriends) &&
                 filteredFriends.length > 0 ? (
-                  filteredFriends.map((user) => {
+                  sortedFriends.map((user) => {
                     const unreadCount = emails.filter(
                       (email) =>
                         email.senderAddress === user.emailAddress &&
