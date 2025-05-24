@@ -29,3 +29,13 @@
 
 `docker-compose stop`
 で停止
+
+ビルドし直す際は
+`docker-compose down --volumes `
+`docker-compose build --no-cache`
+
+localDB リセットは backend/src で
+`npx prisma migrate reset`
+
+localDB の中身確認は backend/src で
+`npx prisma studio`
