@@ -3,11 +3,15 @@
 import { useState, FormEvent, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-function App() {
+export default function MailSend() {
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+  const [loading, setLoading] = useState(false)
   const { data: session } = useSession(); // ← 追加
   const user = session?.user;
   const router = useRouter()
@@ -32,6 +36,7 @@ function App() {
   };
   useEffect(() => {
     const chatGPTHandler = async (email: string, name:string) => {
+      setLoading(true)
       const res = await fetch("http://localhost:8080/api/rewrite-email", {
         method: "POST",
         headers: {
@@ -51,6 +56,7 @@ function App() {
 
       setSubject(subject);
       setBody(body);
+      setLoading(false)
     };
 
     const email = sessionStorage.getItem("email") || "";
@@ -59,13 +65,18 @@ function App() {
     console.log(email);
     console.log(emailAddress);
     setTo(emailAddress);
-    chatGPTHandler(email, name);
+    // chatGPTHandler(email, name);
     // stateにセットするなど
   }, []);
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-md">
+    <Card className="max-w-xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-md">
+      <div className="flex justify-between">
       <h2 className="text-2xl font-bold mb-6">📧 メール送信フォーム</h2>
+      <Button className="text-red-500 text-3xl  hover:text-red-500"
+      variant="ghost"
+      onClick={() => router.push("/ChatScreen")}>×</Button>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-semibold mb-1">宛先（To）</label>
@@ -85,7 +96,7 @@ function App() {
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            placeholder="件名を入力"
+            placeholder={cn(loading ? "生成中...." :"件名を入力")}
             required
             className="w-full border border-gray-300 p-2 rounded"
           />
@@ -96,22 +107,23 @@ function App() {
           <textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            placeholder="本文を入力"
+            placeholder={cn(loading ? "生成中...." :"本文を入力")}
             rows={6}
             required
             className="w-full border border-gray-300 p-2 rounded"
           />
         </div>
 
-        <button
+        <Button
           type="submit"
+          variant="default"
           className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
           onClick={() => router.push("/ChatScreen")}>
           送信
-        </button>
+        </Button>
       </form>
-    </div>
+    </Card>
   );
 }
 
-export default App;
+
