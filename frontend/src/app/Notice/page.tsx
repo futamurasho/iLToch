@@ -11,7 +11,7 @@ export default function NoticePage() {
     if (!email) return;
 
     const connect = () => {
-      const socket = new WebSocket(`ws://localhost:8000/ws/${email}`);
+      const socket = new WebSocket(`ws://localhost:8080/ws/${email}`);
       socketRef.current = socket;
 
       socket.onopen = () => {
