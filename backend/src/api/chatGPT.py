@@ -1,9 +1,26 @@
-from models.chatGPT import ChatMessage
+from models.ChatGPT import ChatMessage
+from fastapi import APIRouter, HTTPException
+import openai
+import os
+from dotenv import load_dotenv
 
-@app.post("/rewriet-email")
+
+
+
+# ← これで出るはず
+
+
+
+router = APIRouter()
+
+@router.post("/rewrite-email")
 async def rewrite_email(chat: ChatMessage):
+    load_dotenv()  # .env を読み込む
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    print(openai.api_key)
+
     user_input = chat.message
-     prompt = f"""
+    prompt = f"""
 以下のカジュアルな文章を、ビジネスメールとして丁寧な文章に添削してください。
 また、文章の内容から適切な件名を推測し、「件名」と「本文」に分けて日本語で出力してください。
 

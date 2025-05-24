@@ -12,6 +12,7 @@ import MessageBubble from "@/components/MessageBubble";
 import { UserListType } from "@/type/UserListType";
 import { EmailType } from "@/type/EmailType";
 import { FriendsType } from "@/type/FriendsType";
+import { Divide } from "lucide-react";
 
 const UserList: UserListType[] = [
   {
@@ -211,11 +212,12 @@ export default function ChatScreen() {
             </CardContent>
           </Card>
         </aside>
+
         <main className="flex-1 border-r p-4 overflow-hidden flex flex-col">
-          <Card className="flex flex-col flex-1 overflow-hidden">
+          {selectUser.id?(<Card className="flex flex-col flex-1 overflow-hidden">
             <CardHeader className="border-b ">
               <CardTitle className="">
-                {selectUser.name || selectUser.emailAddress || "メール"}
+                {selectUser.name || selectUser.emailAddress }
                 からのメール
               </CardTitle>
             </CardHeader>
@@ -256,28 +258,32 @@ export default function ChatScreen() {
               </div>
             </CardContent>
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault(); // ← これを最初に書いておくと安全
                 const formData = new FormData(e.currentTarget);
                 const email = formData.get("email") as string;
+                console.log(email)
 
-                if (email.trim() !== "") {
-                  setEmails((prev) => [
-                    ...prev,
-                    // 現状ここ適当になってます．session情報とかが作れたら変更必要
-                    {
-                      id: Date.now(), // 適当な一意ID
-                      userId: selectUser.id,
-                      gmailMessageId: "1",
-                      content: email,
-                      isRead: true,
-                      isNotified: true,
-                      createdAt: "2025-05-16",
-                    },
-                  ]);
+                if (email.trim() === "")  return
 
-                  e.currentTarget.reset();
+                const res = await fetch("http://localhost:8080/api/rewrite-email", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({message:email})
+                })
+
+                if (!res.ok) {
+                  console.error("添削失敗");
+                  return;
                 }
+            
+                const data = await res.json(); // { subject: string, body: string }
+                const { subject, body } = data;
+                console.log(subject, body)
+                
+                e.currentTarget.reset()
               }}
             >
               <div className="flex pr-2 pl-2">
@@ -291,7 +297,13 @@ export default function ChatScreen() {
                 </Button>
               </div>
             </form>
-          </Card>
+          </Card>):
+          (
+            <main className="flex-1 flex items-center justify-center bg-muted">
+            <h2 className="text-xl text-muted-foreground">誰とトークする？</h2>
+          </main>
+          )}
+          
         </main>
       </div>
     </div>
